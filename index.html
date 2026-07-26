@@ -29,7 +29,7 @@ tailwind.config = {
 
 <style>
   body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050B1E; color: #E5E7EB; overflow-x: hidden; }
-  .font-display { font-family: 'Sora', sans-serif'; }
+  .font-display { font-family: 'Sora', sans-serif; }
   .gradient-text { background: linear-gradient(135deg, #FF6B35 0%, #FFB627 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
   .glass { background: rgba(17, 27, 71, 0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
   .glass-strong { background: rgba(10, 18, 48, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.1); }
@@ -704,7 +704,7 @@ tailwind.config = {
     <h3 class="font-display font-bold text-2xl text-white mb-2">Data Berhasil Terkirim!</h3>
     <p class="text-sm text-gray-400 mb-6">Sales akan menghubungi via WhatsApp dalam <span class="text-accent-orange font-bold">5 menit</span>.</p>
     <div class="glass rounded-xl p-4 mb-6 text-left"><div class="flex items-center gap-3 text-xs text-gray-400"><i class="fa-solid fa-circle-info text-accent-cyan"></i><span>Data lead Anda telah tersimpan. Selanjutnya sales akan cek ketersediaan area & hubungi Anda.</span></div></div>
-    <a id="successWABtn" href="https://wa.me/6281234567890" target="_blank" class="btn-primary block px-6 py-3.5 rounded-xl font-bold text-sm"><i class="fa-brands fa-whatsapp mr-2"></i>Chat Sales Sekarang</a>
+    <a id="successWABtn" href="https://wa.me/6281234567890" target="_blank" onclick="closeSuccessModal()" class="btn-primary block px-6 py-3.5 rounded-xl font-bold text-sm"><i class="fa-brands fa-whatsapp mr-2"></i>Chat Sales Sekarang</a>
   </div>
 </div>
 
@@ -1107,8 +1107,15 @@ tailwind.config = {
   }
   function animateCounter(id, target) { const el = document.getElementById(id); if (!el) return; const cur = parseInt(el.textContent) || 0; const stepV = (target - cur) / 20; let step = 0; const t = setInterval(() => { step++; el.textContent = Math.round(cur + stepV * step); if (step >= 20) { el.textContent = target; clearInterval(t); } }, 30); }
   
-  window.openAdminLogin = function() { document.getElementById('adminLoginModal').classList.remove('hidden-modal'); setTimeout(() => document.getElementById('adminPassword').focus(), 100); };
-  window.closeAdminLogin = function() { document.getElementById('adminLoginModal').classList.remove('hidden-modal'); document.getElementById('adminPassword').value = ''; };
+  window.openAdminLogin = function() { 
+    const sm = document.getElementById('successModal'); if(sm) sm.classList.add('hidden-modal'); // Tutup success modal jika kebuka
+    document.getElementById('adminLoginModal').classList.remove('hidden-modal'); 
+    setTimeout(() => document.getElementById('adminPassword').focus(), 100); 
+  };
+  window.closeAdminLogin = function() { 
+    document.getElementById('adminLoginModal').classList.add('hidden-modal'); 
+    document.getElementById('adminPassword').value = ''; 
+  };
   window.togglePassword = function(inputId, btn) { const i = document.getElementById(inputId); const ic = btn.querySelector('i'); if (i.type === 'password') { i.type = 'text'; ic.classList.replace('fa-eye', 'fa-eye-slash'); } else { i.type = 'password'; ic.classList.replace('fa-eye-slash', 'fa-eye'); } };
   
   document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
@@ -1118,7 +1125,13 @@ tailwind.config = {
   });
   
   window.openAdminDashboard = function() { document.getElementById('adminDashboard').classList.remove('hidden-modal'); document.body.style.overflow = 'hidden'; loadLeads(); loadProofs(); renderPromoForm(); renderPackagesTable(); renderTestimonialsAdmin(); renderProofsAdmin(); renderPartnersAdmin(); renderHeroPicForm(); };
-  window.closeAdminDashboard = function() { document.getElementById('adminDashboard').classList.remove('hidden-modal'); document.body.style.overflow = ''; if (unsubscribeLeads) { unsubscribeLeads(); unsubscribeLeads = null; } if (unsubscribeProofs) { unsubscribeProofs(); unsubscribeProofs = null; } };
+  window.closeAdminDashboard = function() { 
+    document.getElementById('adminDashboard').classList.add('hidden-modal'); 
+    const sm = document.getElementById('successModal'); if(sm) sm.classList.add('hidden-modal'); // Pastikan success modal juga tertutup
+    document.body.style.overflow = ''; 
+    if (unsubscribeLeads) { try { unsubscribeLeads(); } catch(e){} unsubscribeLeads = null; } 
+    if (unsubscribeProofs) { try { unsubscribeProofs(); } catch(e){} unsubscribeProofs = null; } 
+  };
   window.logoutAdmin = function() { sessionStorage.removeItem('rian_admin_session'); closeAdminDashboard(); showToast('Anda telah logout', 'info'); };
   window.switchDashboardTab = function(tab) {
     document.querySelectorAll('.dash-tab').forEach(b => { b.classList.remove('text-accent-orange', 'border-accent-orange'); b.classList.add('text-gray-400', 'border-transparent'); });
