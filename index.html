@@ -83,8 +83,9 @@ tailwind.config = {
   .marquee-track { animation: marquee 30s linear infinite; }
   @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   
-  .partner-logo { filter: grayscale(100%) brightness(0.85); opacity: 0.55; transition: all 0.4s ease; }
-  .partner-logo:hover { filter: grayscale(0%) brightness(1); opacity: 1; transform: scale(1.08); }
+    /* Sebelumnya ada filter grayscale dan opacity, kita hapus */
+  .partner-logo { transition: all 0.4s ease; }
+  .partner-logo:hover { transform: scale(1.08); }
   
   .input-field { background: rgba(5, 11, 30, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
   .input-field:focus { border-color: #FF6B35; background: rgba(5, 11, 30, 0.9); box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15); outline: none; }
@@ -893,7 +894,7 @@ tailwind.config = {
     const marquee = document.getElementById('partnerMarquee');
     if(!marquee) return;
     const logosHtml = currentPartners.map(p => `
-      <img src="${escapeHtml(p.url)}" alt="Logo ${escapeHtml(p.name)}" class="partner-logo h-8 sm:h-10 w-auto object-contain">
+      <img src="${escapeHtml(p.url)}" alt="Logo ${escapeHtml(p.name)}" class="partner-logo h-16 sm:h-20 w-auto object-contain">
     `).join('');
     marquee.innerHTML = `
       <div class="flex gap-10 sm:gap-16 items-center px-8">${logosHtml}</div>
