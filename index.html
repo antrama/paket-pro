@@ -29,7 +29,7 @@ tailwind.config = {
 
 <style>
   body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050B1E; color: #E5E7EB; overflow-x: hidden; }
-  .font-display { font-family: 'Sora', sans-serif; }
+  .font-display { font-family: 'Sora', sans-serif'; }
   .gradient-text { background: linear-gradient(135deg, #FF6B35 0%, #FFB627 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
   .glass { background: rgba(17, 27, 71, 0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
   .glass-strong { background: rgba(10, 18, 48, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.1); }
@@ -156,7 +156,7 @@ tailwind.config = {
 </nav>
 
 <!-- HERO -->
-<section id="hero" class="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden">
+<section id="hero" class="relative min-h-screen flex justify-center items-start lg:items-center pt-28 pb-16 sm:pt-32 lg:pt-24 overflow-hidden">
   <canvas id="networkCanvas" class="absolute inset-0 w-full h-full opacity-60"></canvas>
   <div class="absolute inset-0 grid-pattern"></div>
   <div class="absolute inset-0 bg-gradient-to-b from-navy-950/80 via-transparent to-navy-950"></div>
@@ -588,23 +588,23 @@ tailwind.config = {
           <!-- Hero Profile Pic Management -->
           <div class="glass rounded-2xl p-6">
             <h3 class="font-display font-bold text-lg text-white mb-1">Foto Profil Sales (Hero)</h3>
-            <p class="text-xs text-gray-400 mb-5">Ubah URL foto profil yang tampil di halaman utama.</p>
+            <p class="text-xs text-gray-400 mb-5">Upload foto profil yang tampil di halaman utama.</p>
             <form id="heroPicForm" class="space-y-3">
               <div>
-                <label class="block text-[10px] font-semibold text-gray-300 mb-1.5 tracking-wider">URL FOTO</label>
-                <input type="text" id="heroPicInput" class="input-field w-full px-3 py-2.5 rounded-xl text-xs text-white" placeholder="https://...">
+                <label class="block text-[10px] font-semibold text-gray-300 mb-1.5 tracking-wider">PILIH FOTO</label>
+                <input type="file" id="heroPicInput" accept="image/*" class="input-field w-full px-3 py-2.5 rounded-xl text-xs text-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:bg-accent-orange file:text-navy-950 file:font-bold">
               </div>
               <div class="aspect-square w-full max-w-[200px] rounded-xl overflow-hidden bg-navy-800 mx-auto">
-                <img id="heroPicPreview" src="" alt="Preview" class="w-full h-full object-cover">
+                <img id="heroPicPreview" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=600&fit=crop&q=80" alt="Preview" class="w-full h-full object-cover">
               </div>
-              <button type="submit" class="btn-primary px-4 py-2.5 rounded-xl text-xs font-bold w-full"><i class="fa-solid fa-floppy-disk mr-1.5"></i>Simpan Foto Profil</button>
+              <button type="submit" id="heroPicSubmitBtn" class="btn-primary px-4 py-2.5 rounded-xl text-xs font-bold w-full"><i class="fa-solid fa-cloud-arrow-up mr-1.5"></i>Upload & Simpan Foto Profil</button>
             </form>
           </div>
 
           <!-- Partner Logos Management -->
           <div class="glass rounded-2xl p-6">
             <h3 class="font-display font-bold text-lg text-white mb-1">Logo Official Partner</h3>
-            <p class="text-xs text-gray-400 mb-5">Kelola logo yang berjalan di running text halaman depan.</p>
+            <p class="text-xs text-gray-400 mb-5">Upload logo yang berjalan di running text halaman depan.</p>
             <form id="partnerForm" class="space-y-3 mb-4">
               <div class="grid grid-cols-2 gap-3">
                 <div>
@@ -612,15 +612,15 @@ tailwind.config = {
                   <input type="text" id="partnerName" class="input-field w-full px-3 py-2.5 rounded-xl text-xs text-white" placeholder="IndiHome">
                 </div>
                 <div>
-                  <label class="block text-[10px] font-semibold text-gray-300 mb-1.5 tracking-wider">URL LOGO</label>
-                  <input type="text" id="partnerUrl" class="input-field w-full px-3 py-2.5 rounded-xl text-xs text-white" placeholder="https://...">
+                  <label class="block text-[10px] font-semibold text-gray-300 mb-1.5 tracking-wider">LOGO (Gambar)</label>
+                  <input type="file" id="partnerLogoInput" accept="image/*" class="input-field w-full px-3 py-2.5 rounded-xl text-xs text-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:bg-accent-orange file:text-navy-950 file:font-bold">
                 </div>
               </div>
-              <button type="submit" class="btn-primary px-4 py-2.5 rounded-xl text-xs font-bold w-full"><i class="fa-solid fa-plus mr-1.5"></i>Tambah Logo</button>
+              <button type="submit" id="partnerSubmitBtn" class="btn-primary px-4 py-2.5 rounded-xl text-xs font-bold w-full"><i class="fa-solid fa-cloud-arrow-up mr-1.5"></i>Upload Logo</button>
             </form>
             <div id="partnersListAdmin" class="space-y-2 max-h-[200px] overflow-y-auto pr-2"></div>
           </div>
-        </div>
+        </div> <!-- INI DIV YANG HILANG SEBELUMNYA -->
 
         <!-- Testimonials Management -->
         <div class="glass rounded-2xl p-6 mb-6">
@@ -714,13 +714,13 @@ tailwind.config = {
   // KONFIGURASI FIREBASE
   // ============================================================
   const firebaseConfig = {
-  apiKey: "AIzaSyBYrLwJ3Mr0VlqbV40woc4FXyUc2DvuF-U",
-  authDomain: "paket-pro.firebaseapp.com",
-  projectId: "paket-pro",
-  storageBucket: "paket-pro.firebasestorage.app",
-  messagingSenderId: "848605800841",
-  appId: "1:848605800841:web:a9369f9957d6c100985958",
-  measurementId: "G-BJPJPSR0KP"
+    apiKey: "AIzaSyBYrLwJ3Mr0VlqbV40woc4FXyUc2DvuF-U",
+    authDomain: "paket-pro.firebaseapp.com",
+    projectId: "paket-pro",
+    storageBucket: "paket-pro.firebasestorage.app",
+    messagingSenderId: "848605800841",
+    appId: "1:848605800841:web:a9369f9957d6c100985958",
+    measurementId: "G-BJPJPSR0KP"
   };
   
   const ADMIN_PASSWORD = "admin123";
@@ -733,12 +733,12 @@ tailwind.config = {
     try {
       const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js");
       const { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
-      const { getStorage } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js");
+      const { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js");
       
       const app = initializeApp(firebaseConfig);
       db = getFirestore(app);
       storage = getStorage(app);
-      window._firebase = { db, storage, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy };
+      window._firebase = { db, storage, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy, ref, uploadBytes, getDownloadURL, deleteObject };
       console.log("✅ Firebase initialized (Firestore + Storage)");
     } catch (e) { console.warn("⚠️ Firebase failed, demo mode:", e); }
   } else {
@@ -895,7 +895,6 @@ tailwind.config = {
     const logosHtml = currentPartners.map(p => `
       <img src="${escapeHtml(p.url)}" alt="Logo ${escapeHtml(p.name)}" class="partner-logo h-8 sm:h-10 w-auto object-contain">
     `).join('');
-    // Duplicate for seamless loop
     marquee.innerHTML = `
       <div class="flex gap-10 sm:gap-16 items-center px-8">${logosHtml}</div>
       <div class="flex gap-10 sm:gap-16 items-center px-8" aria-hidden="true">${logosHtml}</div>
@@ -941,27 +940,58 @@ tailwind.config = {
   function renderPackagesTable() {
     const tbody = document.getElementById('packagesTableBody');
     tbody.innerHTML = '';
-    const sortedPackages = [...currentPackages].sort((a, b) => (a.order || 0) - (b.order || 0));
+    const sortedPackages = [...currentPackages].sort((a, b) => {
+      if (a.category !== b.category) {
+        return a.category === 'personal' ? -1 : 1;
+      }
+      return (a.order || 0) - (b.order || 0);
+    });
+
     if (sortedPackages.length === 0) {
       tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-gray-400">Belum ada paket.</td></tr>`;
       return;
     }
-    sortedPackages.forEach((pkg, idx) => {
+
+    const personalPkgs = sortedPackages.filter(p => p.category === 'personal');
+    const businessPkgs = sortedPackages.filter(p => p.category === 'business');
+
+    sortedPackages.forEach((pkg) => {
       const tr = document.createElement('tr');
       tr.className = 'border-b border-white/5 hover:bg-white/[0.02] transition';
       const catLabel = pkg.category === 'personal' ? 'Rumah' : 'Bisnis';
+      
+      const currentList = pkg.category === 'personal' ? personalPkgs : businessPkgs;
+      const idx = currentList.findIndex(p => p.id === pkg.id);
+      const isFirst = idx === 0;
+      const isLast = idx === currentList.length - 1;
+
       tr.innerHTML = `
         <td class="px-3 py-3">
           <div class="flex items-center gap-1">
-            <button onclick="movePackage('${pkg.id}', -1)" ${idx === 0 ? 'disabled' : ''} class="w-6 h-6 rounded flex items-center justify-center ${idx === 0 ? 'text-gray-700' : 'text-gray-400 hover:bg-white/10'}"><i class="fa-solid fa-arrow-up text-[10px]"></i></button>
-            <button onclick="movePackage('${pkg.id}', 1)" ${idx === sortedPackages.length - 1 ? 'disabled' : ''} class="w-6 h-6 rounded flex items-center justify-center ${idx === sortedPackages.length - 1 ? 'text-gray-700' : 'text-gray-400 hover:bg-white/10'}"><i class="fa-solid fa-arrow-down text-[10px]"></i></button>
+            <button onclick="movePackage('${pkg.id}', -1)" ${isFirst ? 'disabled' : ''} class="w-6 h-6 rounded flex items-center justify-center ${isFirst ? 'text-gray-700 cursor-not-allowed' : 'text-gray-400 hover:bg-white/10'}">
+              <i class="fa-solid fa-arrow-up text-[10px]"></i>
+            </button>
+            <button onclick="movePackage('${pkg.id}', 1)" ${isLast ? 'disabled' : ''} class="w-6 h-6 rounded flex items-center justify-center ${isLast ? 'text-gray-700 cursor-not-allowed' : 'text-gray-400 hover:bg-white/10'}">
+              <i class="fa-solid fa-arrow-down text-[10px]"></i>
+            </button>
           </div>
         </td>
-        <td class="px-3 py-3"><div class="font-bold text-white text-sm">${escapeHtml(pkg.name)}</div>${pkg.badge ? `<span class="inline-block mt-1 px-2 py-0.5 rounded bg-accent-orange/20 text-accent-orange text-[9px] font-bold">${escapeHtml(pkg.badge)}</span>` : ''}</td>
+        <td class="px-3 py-3">
+          <div class="font-bold text-white text-sm">${escapeHtml(pkg.name)}</div>
+          ${pkg.badge ? `<span class="inline-block mt-1 px-2 py-0.5 rounded bg-accent-orange/20 text-accent-orange text-[9px] font-bold">${escapeHtml(pkg.badge)}</span>` : ''}
+        </td>
         <td class="px-3 py-3 text-xs text-gray-300">${catLabel}</td>
         <td class="px-3 py-3 text-xs text-gray-300">${pkg.speed} Mbps</td>
-        <td class="px-3 py-3 text-xs text-gray-300"><div class="text-gray-500 line-through">Rp ${formatRupiah(pkg.originalPrice)}</div><div class="text-white font-bold">Rp ${formatRupiah(pkg.promoPrice)}</div></td>
-        <td class="px-3 py-3 text-right"><div class="flex items-center justify-end gap-1.5"><button onclick="editPackage('${pkg.id}')" class="px-2.5 py-1.5 rounded-lg bg-accent-cyan/20 text-accent-cyan hover:bg-accent-cyan/30 border border-accent-cyan/30 transition text-[11px] font-semibold"><i class="fa-solid fa-pen"></i></button><button onclick="deletePackage('${pkg.id}')" class="px-2.5 py-1.5 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30 transition text-[11px] font-semibold"><i class="fa-solid fa-trash"></i></button></div></td>
+        <td class="px-3 py-3 text-xs text-gray-300">
+          <div class="text-gray-500 line-through">Rp ${formatRupiah(pkg.originalPrice)}</div>
+          <div class="text-white font-bold">Rp ${formatRupiah(pkg.promoPrice)}</div>
+        </td>
+        <td class="px-3 py-3 text-right">
+          <div class="flex items-center justify-end gap-1.5">
+            <button onclick="editPackage('${pkg.id}')" class="px-2.5 py-1.5 rounded-lg bg-accent-cyan/20 text-accent-cyan hover:bg-accent-cyan/30 border border-accent-cyan/30 transition text-[11px] font-semibold"><i class="fa-solid fa-pen"></i></button>
+            <button onclick="deletePackage('${pkg.id}')" class="px-2.5 py-1.5 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30 transition text-[11px] font-semibold"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
       `;
       tbody.appendChild(tr);
     });
@@ -1088,7 +1118,7 @@ tailwind.config = {
   });
   
   window.openAdminDashboard = function() { document.getElementById('adminDashboard').classList.remove('hidden-modal'); document.body.style.overflow = 'hidden'; loadLeads(); loadProofs(); renderPromoForm(); renderPackagesTable(); renderTestimonialsAdmin(); renderProofsAdmin(); renderPartnersAdmin(); renderHeroPicForm(); };
-  window.closeAdminDashboard = function() { document.getElementById('adminDashboard').classList.add('hidden-modal'); document.body.style.overflow = ''; if (unsubscribeLeads) { unsubscribeLeads(); unsubscribeLeads = null; } if (unsubscribeProofs) { unsubscribeProofs(); unsubscribeProofs = null; } };
+  window.closeAdminDashboard = function() { document.getElementById('adminDashboard').classList.remove('hidden-modal'); document.body.style.overflow = ''; if (unsubscribeLeads) { unsubscribeLeads(); unsubscribeLeads = null; } if (unsubscribeProofs) { unsubscribeProofs(); unsubscribeProofs = null; } };
   window.logoutAdmin = function() { sessionStorage.removeItem('rian_admin_session'); closeAdminDashboard(); showToast('Anda telah logout', 'info'); };
   window.switchDashboardTab = function(tab) {
     document.querySelectorAll('.dash-tab').forEach(b => { b.classList.remove('text-accent-orange', 'border-accent-orange'); b.classList.add('text-gray-400', 'border-transparent'); });
@@ -1122,20 +1152,27 @@ tailwind.config = {
   });
 
   window.movePackage = function(id, direction) {
-    const sortedPackages = [...currentPackages].sort((a, b) => (a.order || 0) - (b.order || 0));
-    const currentIndex = sortedPackages.findIndex(p => p.id === id);
+    const pkgToMove = currentPackages.find(p => p.id === id);
+    if (!pkgToMove) return;
+
+    const categoryPackages = currentPackages
+      .filter(p => p.category === pkgToMove.category)
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    const currentIndex = categoryPackages.findIndex(p => p.id === id);
     const targetIndex = currentIndex + direction;
-    
-    if (targetIndex < 0 || targetIndex >= sortedPackages.length) return;
-    
-    const currentPkg = sortedPackages[currentIndex];
-    const targetPkg = sortedPackages[targetIndex];
-    
-    // Swap orders
-    const tempOrder = currentPkg.order;
-    currentPkg.order = targetPkg.order;
+
+    if (targetIndex < 0 || targetIndex >= categoryPackages.length) {
+      showToast('Paket sudah berada di urutan paling atas/bawah', 'warning');
+      return;
+    }
+
+    const targetPkg = categoryPackages[targetIndex];
+
+    const tempOrder = pkgToMove.order || 0;
+    pkgToMove.order = targetPkg.order || 0;
     targetPkg.order = tempOrder;
-    
+
     saveToStorage('packages', currentPackages);
     renderPackagesTable();
     renderPackages();
@@ -1183,19 +1220,118 @@ tailwind.config = {
     document.getElementById('testimonialForm').reset(); document.getElementById('testimonialId').value = ''; document.getElementById('testimonialSubmitBtn').innerHTML = '<i class="fa-solid fa-plus mr-1.5"></i>Tambah Testimoni'; document.getElementById('testimonialCancelBtn').classList.add('hidden');
   };
 
-  // Partner Logo Logic
-  document.getElementById('partnerForm').addEventListener('submit', (e) => {
+  // ============================================================
+  // HERO PROFILE PIC UPLOAD LOGIC
+  // ============================================================
+  function renderHeroPicForm() {
+    document.getElementById('heroPicPreview').src = currentHeroPic;
+  }
+  
+  document.getElementById('heroPicInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        document.getElementById('heroPicPreview').src = reader.result;
+      }
+      reader.readAsDataURL(file);
+    }
+  });
+  
+  document.getElementById('heroPicForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fileInput = document.getElementById('heroPicInput');
+    if (!fileInput.files[0]) {
+      showToast('Pilih gambar terlebih dahulu!', 'warning');
+      return;
+    }
+    
+    const file = fileInput.files[0];
+    const submitBtn = document.getElementById('heroPicSubmitBtn');
+    const originalBtnHtml = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1.5"></i>Uploading...';
+    submitBtn.disabled = true;
+
+    try {
+      let downloadURL = '';
+      if (db && window._firebase) {
+        const { storage, ref, uploadBytes, getDownloadURL } = window._firebase;
+        const storageRef = ref(storage, `hero/${Date.now()}_${file.name}`);
+        const snapshot = await uploadBytes(storageRef, file);
+        downloadURL = await getDownloadURL(snapshot.ref);
+      } else {
+        // Demo Mode: Convert to Base64
+        downloadURL = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(file);
+        });
+      }
+      
+      currentHeroPic = downloadURL;
+      saveToStorage('heroPic', currentHeroPic);
+      renderHeroPic();
+      showToast('Foto profil berhasil diupload & diperbarui!', 'success');
+      fileInput.value = '';
+    } catch (error) {
+      console.error('Error uploading hero pic:', error);
+      showToast('Gagal upload foto profil.', 'error');
+    } finally {
+      submitBtn.innerHTML = originalBtnHtml;
+      submitBtn.disabled = false;
+    }
+  });
+
+  // ============================================================
+  // PARTNER LOGO UPLOAD LOGIC
+  // ============================================================
+  document.getElementById('partnerForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('partnerName').value.trim();
-    const url = document.getElementById('partnerUrl').value.trim();
-    if (!name || !url) { showToast('Nama dan URL logo wajib diisi!', 'error'); return; }
-    currentPartners.push({ id: 'pt_' + Date.now(), name, url });
-    saveToStorage('partners', currentPartners);
-    renderPartnersAdmin();
-    renderPartners();
-    document.getElementById('partnerForm').reset();
-    showToast('Logo partner berhasil ditambahkan!', 'success');
+    const fileInput = document.getElementById('partnerLogoInput');
+    
+    if (!name || !fileInput.files[0]) {
+      showToast('Nama dan file logo wajib diisi!', 'error');
+      return;
+    }
+    
+    const file = fileInput.files[0];
+    const submitBtn = document.getElementById('partnerSubmitBtn');
+    const originalBtnHtml = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1.5"></i>Uploading...';
+    submitBtn.disabled = true;
+
+    try {
+      let downloadURL = '';
+      if (db && window._firebase) {
+        const { storage, ref, uploadBytes, getDownloadURL } = window._firebase;
+        const storageRef = ref(storage, `partners/${Date.now()}_${file.name}`);
+        const snapshot = await uploadBytes(storageRef, file);
+        downloadURL = await getDownloadURL(snapshot.ref);
+      } else {
+        // Demo Mode: Convert to Base64
+        downloadURL = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(file);
+        });
+      }
+      
+      currentPartners.push({ id: 'pt_' + Date.now(), name, url: downloadURL });
+      saveToStorage('partners', currentPartners);
+      renderPartnersAdmin();
+      renderPartners();
+      showToast('Logo partner berhasil diupload!', 'success');
+      document.getElementById('partnerForm').reset();
+    } catch (error) {
+      console.error('Error uploading partner logo:', error);
+      showToast('Gagal upload logo partner.', 'error');
+    } finally {
+      submitBtn.innerHTML = originalBtnHtml;
+      submitBtn.disabled = false;
+    }
   });
+  
   window.deletePartner = function(id) {
     if (!confirm('Hapus logo partner ini?')) return;
     currentPartners = currentPartners.filter(p => p.id !== id);
@@ -1204,22 +1340,6 @@ tailwind.config = {
     renderPartners();
     showToast('Logo partner dihapus', 'success');
   };
-
-  // Hero Profile Pic Logic
-  function renderHeroPicForm() {
-    document.getElementById('heroPicInput').value = currentHeroPic;
-    document.getElementById('heroPicPreview').src = currentHeroPic;
-  }
-  document.getElementById('heroPicInput').addEventListener('input', (e) => {
-    document.getElementById('heroPicPreview').src = e.target.value;
-  });
-  document.getElementById('heroPicForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    currentHeroPic = document.getElementById('heroPicInput').value.trim();
-    saveToStorage('heroPic', currentHeroPic);
-    renderHeroPic();
-    showToast('Foto profil berhasil diperbarui!', 'success');
-  });
 
   window.exportLeads = function() {
     if (currentLeads.length === 0) { showToast('Tidak ada data untuk diexport', 'warning'); return; }
