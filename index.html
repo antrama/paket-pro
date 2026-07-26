@@ -1217,7 +1217,7 @@ tailwind.config = {
   
   function init() {
     const canvas = document.getElementById('networkCanvas'); if (canvas) new NetworkBackground(canvas);
-    renderPackages(); renderTestimonials(); updatePromoBanner();
+    renderPackages(); renderTestimonials(); updatePromoBanner(); loadProofs();
     // loadProofs dipanggil saat dashboard dibuka
     if (sessionStorage.getItem('rian_admin_session') === 'active') openAdminDashboard();
     console.log('%c🚀 Rian WiFi Specialist Website Loaded', 'color: #FF6B35; font-weight: bold; font-size: 14px;');
