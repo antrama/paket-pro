@@ -894,7 +894,7 @@ tailwind.config = {
     const marquee = document.getElementById('partnerMarquee');
     if(!marquee) return;
     const logosHtml = currentPartners.map(p => `
-      <img src="${escapeHtml(p.url)}" alt="Logo ${escapeHtml(p.name)}" class="partner-logo h-16 sm:h-20 w-auto object-contain">
+      <img src="${escapeHtml(p.url)}" alt="Logo ${escapeHtml(p.name)}" class="partner-logo h-32 sm:h-40 w-auto object-contain">
     `).join('');
     marquee.innerHTML = `
       <div class="flex gap-10 sm:gap-16 items-center px-8">${logosHtml}</div>
