@@ -84,8 +84,18 @@ tailwind.config = {
   @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   
     /* Sebelumnya ada filter grayscale dan opacity, kita hapus */
-  .partner-logo { transition: all 0.4s ease; }
-  .partner-logo:hover { transform: scale(1.08); }
+  .partner-logo { 
+    background: rgba(255, 255, 255, 0.92); /* Latar belakang putih agar logo gelap terlihat */
+    padding: 8px 12px; /* Memberi jarak di dalam logo agar tidak mepet */
+    border-radius: 10px; /* Membuat sudut membulat */
+    box-shadow: 0 4px 15px rgba(0, 217, 255, 0.15); /* Efek bersinar/silau lembut */
+    transition: all 0.3s ease; 
+  }
+  .partner-logo:hover { 
+    background: #ffffff; /* Putih penuh saat di-hover */
+    box-shadow: 0 6px 20px rgba(0, 217, 255, 0.3); /* Efek bersinar lebih kuat saat di-hover */
+    transform: scale(1.05); 
+  }
   
   .input-field { background: rgba(5, 11, 30, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
   .input-field:focus { border-color: #FF6B35; background: rgba(5, 11, 30, 0.9); box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15); outline: none; }
