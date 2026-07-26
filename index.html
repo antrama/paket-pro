@@ -187,7 +187,7 @@ tailwind.config = {
           <div class="signal-ring delay-1 inset-0"></div>
           <div class="signal-ring delay-2 inset-0"></div>
           <div class="absolute inset-4 sm:inset-6 rounded-full overflow-hidden border-4 border-accent-orange/30 pulse-glow">
-            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=600&fit=crop&q=80" alt="Rian - Internet Specialist" class="w-full h-full object-cover">
+            <img id="heroProfileImg" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=600&fit=crop&q=80" alt="Rian - Internet Specialist" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-navy-950/60 via-transparent to-transparent"></div>
           </div>
           <div class="absolute -top-2 -right-2 sm:top-2 sm:right-2 glass-strong rounded-2xl px-3 py-2 floating">
@@ -209,7 +209,7 @@ tailwind.config = {
   <div class="absolute bottom-6 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-gray-500"><span class="text-[10px] font-semibold tracking-widest">SCROLL</span><div class="w-px h-8 bg-gradient-to-b from-gray-500 to-transparent"></div></div>
 </section>
 
-<!-- PARTNER LOGOS -->
+<!-- PARTNER LOGOS (DYNAMIC) -->
 <section class="py-10 sm:py-12 border-y border-white/5 bg-navy-900/50 overflow-hidden">
   <div class="max-w-7xl mx-auto px-4 mb-6">
     <div class="flex items-center gap-3 text-xs text-gray-500 font-semibold tracking-wider justify-center">
@@ -221,18 +221,7 @@ tailwind.config = {
   <div class="overflow-hidden relative">
     <div class="absolute left-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-r from-navy-900 to-transparent z-10 pointer-events-none"></div>
     <div class="absolute right-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-l from-navy-900 to-transparent z-10 pointer-events-none"></div>
-    <div class="flex w-max marquee-track">
-      <div class="flex gap-10 sm:gap-16 items-center px-8">
-        <img src="https://placehold.co/180x60/0A1230/FFFFFF?text=INDIHOME&font=montserrat" alt="Logo IndiHome" class="partner-logo h-8 sm:h-10 w-auto object-contain">
-        <img src="https://placehold.co/180x60/0A1230/FFFFFF?text=BIZNET&font=montserrat" alt="Logo Biznet" class="partner-logo h-8 sm:h-10 w-auto object-contain">
-        <img src="https://placehold.co/180x60/0A1230/FFFFFF?text=MYREPUBLIC&font=montserrat" alt="Logo MyRepublic" class="partner-logo h-8 sm:h-10 w-auto object-contain">
-      </div>
-      <div class="flex gap-10 sm:gap-16 items-center px-8" aria-hidden="true">
-        <img src="https://placehold.co/180x60/0A1230/FFFFFF?text=INDIHOME&font=montserrat" alt="Logo IndiHome" class="partner-logo h-8 sm:h-10 w-auto object-contain">
-        <img src="https://placehold.co/180x60/0A1230/FFFFFF?text=BIZNET&font=montserrat" alt="Logo Biznet" class="partner-logo h-8 sm:h-10 w-auto object-contain">
-        <img src="https://placehold.co/180x60/0A1230/FFFFFF?text=MYREPUBLIC&font=montserrat" alt="Logo MyRepublic" class="partner-logo h-8 sm:h-10 w-auto object-contain">
-      </div>
-    </div>
+    <div id="partnerMarquee" class="flex w-max marquee-track"></div>
   </div>
 </section>
 
@@ -575,10 +564,11 @@ tailwind.config = {
         </div>
         
         <div class="glass rounded-2xl p-4 sm:p-6">
-          <h3 class="font-display font-bold text-lg text-white mb-4">Daftar Paket Aktif</h3>
+          <h3 class="font-display font-bold text-lg text-white mb-4">Daftar Paket Aktif (Urutkan Tampilan)</h3>
           <div class="overflow-x-auto -mx-4 sm:mx-0">
             <table class="w-full min-w-[700px]">
               <thead><tr class="border-b border-white/5 text-left">
+                <th class="px-3 py-3 text-[10px] font-bold text-gray-400 tracking-wider w-12">URUTAN</th>
                 <th class="px-3 py-3 text-[10px] font-bold text-gray-400 tracking-wider">NAMA PAKET</th>
                 <th class="px-3 py-3 text-[10px] font-bold text-gray-400 tracking-wider">KATEGORI</th>
                 <th class="px-3 py-3 text-[10px] font-bold text-gray-400 tracking-wider">KECEPATAN</th>
@@ -594,11 +584,48 @@ tailwind.config = {
       <!-- Content Management Tab -->
       <div id="dashTab-content" class="dash-content hidden">
         
+        <div class="grid lg:grid-cols-2 gap-6 mb-6">
+          <!-- Hero Profile Pic Management -->
+          <div class="glass rounded-2xl p-6">
+            <h3 class="font-display font-bold text-lg text-white mb-1">Foto Profil Sales (Hero)</h3>
+            <p class="text-xs text-gray-400 mb-5">Ubah URL foto profil yang tampil di halaman utama.</p>
+            <form id="heroPicForm" class="space-y-3">
+              <div>
+                <label class="block text-[10px] font-semibold text-gray-300 mb-1.5 tracking-wider">URL FOTO</label>
+                <input type="text" id="heroPicInput" class="input-field w-full px-3 py-2.5 rounded-xl text-xs text-white" placeholder="https://...">
+              </div>
+              <div class="aspect-square w-full max-w-[200px] rounded-xl overflow-hidden bg-navy-800 mx-auto">
+                <img id="heroPicPreview" src="" alt="Preview" class="w-full h-full object-cover">
+              </div>
+              <button type="submit" class="btn-primary px-4 py-2.5 rounded-xl text-xs font-bold w-full"><i class="fa-solid fa-floppy-disk mr-1.5"></i>Simpan Foto Profil</button>
+            </form>
+          </div>
+
+          <!-- Partner Logos Management -->
+          <div class="glass rounded-2xl p-6">
+            <h3 class="font-display font-bold text-lg text-white mb-1">Logo Official Partner</h3>
+            <p class="text-xs text-gray-400 mb-5">Kelola logo yang berjalan di running text halaman depan.</p>
+            <form id="partnerForm" class="space-y-3 mb-4">
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[10px] font-semibold text-gray-300 mb-1.5 tracking-wider">NAMA PARTNER</label>
+                  <input type="text" id="partnerName" class="input-field w-full px-3 py-2.5 rounded-xl text-xs text-white" placeholder="IndiHome">
+                </div>
+                <div>
+                  <label class="block text-[10px] font-semibold text-gray-300 mb-1.5 tracking-wider">URL LOGO</label>
+                  <input type="text" id="partnerUrl" class="input-field w-full px-3 py-2.5 rounded-xl text-xs text-white" placeholder="https://...">
+                </div>
+              </div>
+              <button type="submit" class="btn-primary px-4 py-2.5 rounded-xl text-xs font-bold w-full"><i class="fa-solid fa-plus mr-1.5"></i>Tambah Logo</button>
+            </form>
+            <div id="partnersListAdmin" class="space-y-2 max-h-[200px] overflow-y-auto pr-2"></div>
+          </div>
+        </div>
+
         <!-- Testimonials Management -->
         <div class="glass rounded-2xl p-6 mb-6">
           <h3 class="font-display font-bold text-lg text-white mb-1">Manajemen Testimoni</h3>
           <p class="text-xs text-gray-400 mb-5">Tambah, edit, atau hapus testimoni pelanggan.</p>
-          
           <form id="testimonialForm" class="space-y-3 mb-6">
             <input type="hidden" id="testimonialId">
             <div class="grid sm:grid-cols-2 gap-3">
@@ -630,7 +657,6 @@ tailwind.config = {
               <button type="button" id="testimonialCancelBtn" onclick="resetTestimonialForm()" class="btn-secondary px-4 py-3 rounded-xl font-bold text-xs hidden">Batal</button>
             </div>
           </form>
-
           <div class="overflow-x-auto -mx-4 sm:mx-0">
             <table class="w-full min-w-[600px]">
               <thead><tr class="border-b border-white/5 text-left">
@@ -644,11 +670,10 @@ tailwind.config = {
           </div>
         </div>
 
-        <!-- Proofs Management (Firebase Storage Integration) -->
+        <!-- Proofs Management -->
         <div class="glass rounded-2xl p-6">
           <h3 class="font-display font-bold text-lg text-white mb-1">Manajemen Bukti Pemasangan</h3>
           <p class="text-xs text-gray-400 mb-5">Upload foto pemasangan langsung ke Firebase Storage, otomatis tampil di halaman depan.</p>
-
           <form id="uploadProofForm" class="grid sm:grid-cols-3 gap-3 items-end mb-6">
             <div class="sm:col-span-2">
               <label class="block text-[10px] font-semibold text-gray-300 mb-1.5 tracking-wider">PILIH GAMBAR</label>
@@ -662,7 +687,6 @@ tailwind.config = {
               <button type="submit" class="btn-primary px-4 py-2.5 rounded-xl text-xs font-bold w-full sm:w-auto"><i class="fa-solid fa-cloud-arrow-up mr-1.5"></i>Upload & Tampilkan di Web</button>
             </div>
           </form>
-
           <h4 class="text-sm font-bold text-gray-300 mb-3">Daftar Foto Pemasangan</h4>
           <div id="proofsListAdmin" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
         </div>
@@ -690,13 +714,12 @@ tailwind.config = {
   // KONFIGURASI FIREBASE
   // ============================================================
   const firebaseConfig = {
-  apiKey: "AIzaSyBYrLwJ3Mr0VlqbV40woc4FXyUc2DvuF-U",
-  authDomain: "paket-pro.firebaseapp.com",
-  projectId: "paket-pro",
-  storageBucket: "paket-pro.firebasestorage.app",
-  messagingSenderId: "848605800841",
-  appId: "1:848605800841:web:a9369f9957d6c100985958",
-  measurementId: "G-BJPJPSR0KP"
+    apiKey: "YOUR_API_KEY_HERE",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
   };
   
   const ADMIN_PASSWORD = "admin123";
@@ -709,12 +732,12 @@ tailwind.config = {
     try {
       const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js");
       const { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
-      const { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js");
+      const { getStorage } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js");
       
       const app = initializeApp(firebaseConfig);
       db = getFirestore(app);
       storage = getStorage(app);
-      window._firebase = { db, storage, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy, ref, uploadBytes, getDownloadURL, deleteObject };
+      window._firebase = { db, storage, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy };
       console.log("✅ Firebase initialized (Firestore + Storage)");
     } catch (e) { console.warn("⚠️ Firebase failed, demo mode:", e); }
   } else {
@@ -723,12 +746,12 @@ tailwind.config = {
   
   // Default Data
   const DEFAULT_PACKAGES = [
-    { id: 'p1', category: 'personal', name: 'HOME LITE', speed: 30, originalPrice: 300000, promoPrice: 250000, badge: '', features: 'Unlimited Internet, Free Modem WiFi, Free Instalasi, 1 Alamat IP, Support 5 Device' },
-    { id: 'p2', category: 'personal', name: 'HOME PLUS', speed: 50, originalPrice: 400000, promoPrice: 350000, badge: 'PALING POPULER', features: 'Unlimited Internet, Free Modem WiFi Dual Band, Free Instalasi, Free 3 Add-On, 2 Alamat IP, Support 10 Device' },
-    { id: 'p3', category: 'personal', name: 'HOME PRO', speed: 100, originalPrice: 500000, promoPrice: 450000, badge: 'HEMAT 10%', features: 'Unlimited Internet, Free Modem WiFi Dual Band, Free Instalasi, Free 5 Add-On Premium, 3 Alamat IP, Priority Support, Support 20 Device' },
-    { id: 'b1', category: 'business', name: 'BIZ STARTER', speed: 100, originalPrice: 800000, promoPrice: 700000, badge: '', features: 'Dedicated Bandwidth, 5 Alamat IP Statis, SLA 99.5%, 24/7 Support, Free Managed Router' },
-    { id: 'b2', category: 'business', name: 'BIZ GROWTH', speed: 200, originalPrice: 1400000, promoPrice: 1200000, badge: 'PALING POPULER', features: 'Dedicated Bandwidth, 10 Alamat IP Statis, SLA 99.9%, 24/7 Priority Support, Free Managed Router + Backup, Free Cloud Storage 100GB' },
-    { id: 'b3', category: 'business', name: 'BIZ ENTERPRISE', speed: 500, originalPrice: 3000000, promoPrice: 2500000, badge: 'HEMAT 17%', features: 'Dedicated Symmetric Bandwidth, Unlimited IP Statis, SLA 99.99%, Dedicated Account Manager, Free Dual Router Setup, Free Cloud Storage 1TB, Free Security Suite' }
+    { id: 'p1', category: 'personal', name: 'HOME LITE', speed: 30, originalPrice: 300000, promoPrice: 250000, badge: '', features: 'Unlimited Internet, Free Modem WiFi, Free Instalasi, 1 Alamat IP, Support 5 Device', order: 0 },
+    { id: 'p2', category: 'personal', name: 'HOME PLUS', speed: 50, originalPrice: 400000, promoPrice: 350000, badge: 'PALING POPULER', features: 'Unlimited Internet, Free Modem WiFi Dual Band, Free Instalasi, Free 3 Add-On, 2 Alamat IP, Support 10 Device', order: 1 },
+    { id: 'p3', category: 'personal', name: 'HOME PRO', speed: 100, originalPrice: 500000, promoPrice: 450000, badge: 'HEMAT 10%', features: 'Unlimited Internet, Free Modem WiFi Dual Band, Free Instalasi, Free 5 Add-On Premium, 3 Alamat IP, Priority Support, Support 20 Device', order: 2 },
+    { id: 'b1', category: 'business', name: 'BIZ STARTER', speed: 100, originalPrice: 800000, promoPrice: 700000, badge: '', features: 'Dedicated Bandwidth, 5 Alamat IP Statis, SLA 99.5%, 24/7 Support, Free Managed Router', order: 0 },
+    { id: 'b2', category: 'business', name: 'BIZ GROWTH', speed: 200, originalPrice: 1400000, promoPrice: 1200000, badge: 'PALING POPULER', features: 'Dedicated Bandwidth, 10 Alamat IP Statis, SLA 99.9%, 24/7 Priority Support, Free Managed Router + Backup, Free Cloud Storage 100GB', order: 1 },
+    { id: 'b3', category: 'business', name: 'BIZ ENTERPRISE', speed: 500, originalPrice: 3000000, promoPrice: 2500000, badge: 'HEMAT 17%', features: 'Dedicated Symmetric Bandwidth, Unlimited IP Statis, SLA 99.99%, Dedicated Account Manager, Free Dual Router Setup, Free Cloud Storage 1TB, Free Security Suite', order: 2 }
   ];
   const DEFAULT_PROMO = { text: 'Gratis Modem WiFi + Instalasi untuk 50 Pelanggan Pertama!', desc: 'Berlaku untuk semua paket. Klaim sekarang sebelum kuota habis.' };
   const DEFAULT_TESTIMONIALS = [
@@ -745,12 +768,20 @@ tailwind.config = {
     { id: 'pr3', url: 'https://images.unsplash.com/photo-1563850571660-8ad79d2a46d3?w=400&h=400&fit=crop&q=80', location: 'Tangerang', createdAt: new Date(Date.now() - 86400000 * 4).toISOString() },
     { id: 'pr4', url: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400&h=400&fit=crop&q=80', location: 'Jakarta', createdAt: new Date(Date.now() - 86400000 * 5).toISOString() }
   ];
+  const DEFAULT_PARTNERS = [
+    { id: 'pt1', name: 'IndiHome', url: 'https://placehold.co/180x60/0A1230/FFFFFF?text=INDIHOME&font=montserrat' },
+    { id: 'pt2', name: 'Biznet', url: 'https://placehold.co/180x60/0A1230/FFFFFF?text=BIZNET&font=montserrat' },
+    { id: 'pt3', name: 'MyRepublic', url: 'https://placehold.co/180x60/0A1230/FFFFFF?text=MYREPUBLIC&font=montserrat' }
+  ];
+  const DEFAULT_HERO_PIC = 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=600&fit=crop&q=80';
   
   let currentLeads = [];
   let currentPackages = loadFromStorage('packages', DEFAULT_PACKAGES);
   let currentPromo = loadFromStorage('promo', DEFAULT_PROMO);
   let currentProofs = loadFromStorage('proofs', DEFAULT_PROOFS);
   let currentTestimonials = loadFromStorage('testimonials', DEFAULT_TESTIMONIALS);
+  let currentPartners = loadFromStorage('partners', DEFAULT_PARTNERS);
+  let currentHeroPic = loadFromStorage('heroPic', DEFAULT_HERO_PIC);
   
   function loadFromStorage(key, defaultValue) { try { const s = localStorage.getItem(`rian_${key}`); return s ? JSON.parse(s) : defaultValue; } catch { return defaultValue; } }
   function saveToStorage(key, value) { try { localStorage.setItem(`rian_${key}`, JSON.stringify(value)); } catch (e) { console.error(e); } }
@@ -806,7 +837,7 @@ tailwind.config = {
     ['personal', 'business'].forEach(type => {
       const container = document.getElementById(`tab-${type}`);
       container.innerHTML = '';
-      const packages = currentPackages.filter(p => p.category === type);
+      const packages = currentPackages.filter(p => p.category === type).sort((a, b) => (a.order || 0) - (b.order || 0));
       if (packages.length === 0) {
         container.innerHTML = `<div class="md:col-span-3 text-center py-16 text-gray-400"><i class="fa-solid fa-box-open text-4xl mb-3 text-gray-600"></i><p>Belum ada paket di kategori ini.</p></div>`;
         return;
@@ -844,20 +875,35 @@ tailwind.config = {
 
   function renderInstallations() {
     const grid = document.getElementById('installationsGrid'); grid.innerHTML = '';
-    // Sort by date descending
     const sortedProofs = [...currentProofs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    
     if (sortedProofs.length === 0) {
       grid.innerHTML = `<div class="col-span-full text-center py-8 text-gray-400">Belum ada foto bukti pemasangan.</div>`;
       return;
     }
-    
     sortedProofs.forEach((p, idx) => {
       const item = document.createElement('div');
       item.className = 'group relative aspect-square rounded-2xl overflow-hidden cursor-pointer';
       item.innerHTML = `<img src="${p.url}" alt="Pemasangan WiFi ${idx + 1}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy"><div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent opacity-80 group-hover:opacity-100 transition"></div><div class="absolute bottom-0 left-0 right-0 p-3 sm:p-4 translate-y-2 group-hover:translate-y-0 transition"><div class="flex items-center gap-2 text-[10px] text-accent-orange font-bold tracking-wider mb-1"><i class="fa-solid fa-location-dot"></i><span>${escapeHtml(p.location)}</span></div><div class="text-white text-xs sm:text-sm font-bold">Pemasangan #${String(idx + 1).padStart(3, '0')}</div></div><div class="absolute top-3 right-3 w-8 h-8 rounded-lg bg-accent-orange/90 text-navy-950 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-check text-xs"></i></div>`;
       grid.appendChild(item);
     });
+  }
+
+  function renderPartners() {
+    const marquee = document.getElementById('partnerMarquee');
+    if(!marquee) return;
+    const logosHtml = currentPartners.map(p => `
+      <img src="${escapeHtml(p.url)}" alt="Logo ${escapeHtml(p.name)}" class="partner-logo h-8 sm:h-10 w-auto object-contain">
+    `).join('');
+    // Duplicate for seamless loop
+    marquee.innerHTML = `
+      <div class="flex gap-10 sm:gap-16 items-center px-8">${logosHtml}</div>
+      <div class="flex gap-10 sm:gap-16 items-center px-8" aria-hidden="true">${logosHtml}</div>
+    `;
+  }
+
+  function renderHeroPic() {
+    const img = document.getElementById('heroProfileImg');
+    if(img) img.src = currentHeroPic;
   }
 
   // Admin Renderers
@@ -894,16 +940,50 @@ tailwind.config = {
   function renderPackagesTable() {
     const tbody = document.getElementById('packagesTableBody');
     tbody.innerHTML = '';
-    if (currentPackages.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400">Belum ada paket.</td></tr>`;
+    const sortedPackages = [...currentPackages].sort((a, b) => (a.order || 0) - (b.order || 0));
+    if (sortedPackages.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-gray-400">Belum ada paket.</td></tr>`;
       return;
     }
-    currentPackages.forEach(pkg => {
+    sortedPackages.forEach((pkg, idx) => {
       const tr = document.createElement('tr');
       tr.className = 'border-b border-white/5 hover:bg-white/[0.02] transition';
       const catLabel = pkg.category === 'personal' ? 'Rumah' : 'Bisnis';
-      tr.innerHTML = `<td class="px-3 py-3"><div class="font-bold text-white text-sm">${escapeHtml(pkg.name)}</div>${pkg.badge ? `<span class="inline-block mt-1 px-2 py-0.5 rounded bg-accent-orange/20 text-accent-orange text-[9px] font-bold">${escapeHtml(pkg.badge)}</span>` : ''}</td><td class="px-3 py-3 text-xs text-gray-300">${catLabel}</td><td class="px-3 py-3 text-xs text-gray-300">${pkg.speed} Mbps</td><td class="px-3 py-3 text-xs text-gray-300"><div class="text-gray-500 line-through">Rp ${formatRupiah(pkg.originalPrice)}</div><div class="text-white font-bold">Rp ${formatRupiah(pkg.promoPrice)}</div></td><td class="px-3 py-3 text-right"><div class="flex items-center justify-end gap-1.5"><button onclick="editPackage('${pkg.id}')" class="px-2.5 py-1.5 rounded-lg bg-accent-cyan/20 text-accent-cyan hover:bg-accent-cyan/30 border border-accent-cyan/30 transition text-[11px] font-semibold"><i class="fa-solid fa-pen"></i></button><button onclick="deletePackage('${pkg.id}')" class="px-2.5 py-1.5 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30 transition text-[11px] font-semibold"><i class="fa-solid fa-trash"></i></button></div></td>`;
+      tr.innerHTML = `
+        <td class="px-3 py-3">
+          <div class="flex items-center gap-1">
+            <button onclick="movePackage('${pkg.id}', -1)" ${idx === 0 ? 'disabled' : ''} class="w-6 h-6 rounded flex items-center justify-center ${idx === 0 ? 'text-gray-700' : 'text-gray-400 hover:bg-white/10'}"><i class="fa-solid fa-arrow-up text-[10px]"></i></button>
+            <button onclick="movePackage('${pkg.id}', 1)" ${idx === sortedPackages.length - 1 ? 'disabled' : ''} class="w-6 h-6 rounded flex items-center justify-center ${idx === sortedPackages.length - 1 ? 'text-gray-700' : 'text-gray-400 hover:bg-white/10'}"><i class="fa-solid fa-arrow-down text-[10px]"></i></button>
+          </div>
+        </td>
+        <td class="px-3 py-3"><div class="font-bold text-white text-sm">${escapeHtml(pkg.name)}</div>${pkg.badge ? `<span class="inline-block mt-1 px-2 py-0.5 rounded bg-accent-orange/20 text-accent-orange text-[9px] font-bold">${escapeHtml(pkg.badge)}</span>` : ''}</td>
+        <td class="px-3 py-3 text-xs text-gray-300">${catLabel}</td>
+        <td class="px-3 py-3 text-xs text-gray-300">${pkg.speed} Mbps</td>
+        <td class="px-3 py-3 text-xs text-gray-300"><div class="text-gray-500 line-through">Rp ${formatRupiah(pkg.originalPrice)}</div><div class="text-white font-bold">Rp ${formatRupiah(pkg.promoPrice)}</div></td>
+        <td class="px-3 py-3 text-right"><div class="flex items-center justify-end gap-1.5"><button onclick="editPackage('${pkg.id}')" class="px-2.5 py-1.5 rounded-lg bg-accent-cyan/20 text-accent-cyan hover:bg-accent-cyan/30 border border-accent-cyan/30 transition text-[11px] font-semibold"><i class="fa-solid fa-pen"></i></button><button onclick="deletePackage('${pkg.id}')" class="px-2.5 py-1.5 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30 transition text-[11px] font-semibold"><i class="fa-solid fa-trash"></i></button></div></td>
+      `;
       tbody.appendChild(tr);
+    });
+  }
+
+  function renderPartnersAdmin() {
+    const list = document.getElementById('partnersListAdmin');
+    list.innerHTML = '';
+    if (currentPartners.length === 0) {
+      list.innerHTML = `<div class="text-center py-4 text-gray-400 text-xs">Belum ada logo partner.</div>`;
+      return;
+    }
+    currentPartners.forEach(p => {
+      const item = document.createElement('div');
+      item.className = 'flex items-center justify-between bg-navy-800/50 rounded-lg p-2';
+      item.innerHTML = `
+        <div class="flex items-center gap-2">
+          <img src="${p.url}" alt="${p.name}" class="h-6 w-auto rounded object-contain bg-white/5 p-0.5">
+          <span class="text-xs text-white font-semibold">${p.name}</span>
+        </div>
+        <button onclick="deletePartner('${p.id}')" class="text-red-400 hover:bg-red-500/20 px-2 py-1 rounded text-[10px]"><i class="fa-solid fa-trash"></i></button>
+      `;
+      list.appendChild(item);
     });
   }
 
@@ -997,7 +1077,7 @@ tailwind.config = {
   function animateCounter(id, target) { const el = document.getElementById(id); if (!el) return; const cur = parseInt(el.textContent) || 0; const stepV = (target - cur) / 20; let step = 0; const t = setInterval(() => { step++; el.textContent = Math.round(cur + stepV * step); if (step >= 20) { el.textContent = target; clearInterval(t); } }, 30); }
   
   window.openAdminLogin = function() { document.getElementById('adminLoginModal').classList.remove('hidden-modal'); setTimeout(() => document.getElementById('adminPassword').focus(), 100); };
-  window.closeAdminLogin = function() { document.getElementById('adminLoginModal').classList.add('hidden-modal'); document.getElementById('adminPassword').value = ''; };
+  window.closeAdminLogin = function() { document.getElementById('adminLoginModal').classList.remove('hidden-modal'); document.getElementById('adminPassword').value = ''; };
   window.togglePassword = function(inputId, btn) { const i = document.getElementById(inputId); const ic = btn.querySelector('i'); if (i.type === 'password') { i.type = 'text'; ic.classList.replace('fa-eye', 'fa-eye-slash'); } else { i.type = 'password'; ic.classList.replace('fa-eye-slash', 'fa-eye'); } };
   
   document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
@@ -1006,7 +1086,7 @@ tailwind.config = {
     else { showToast('Password salah! Coba lagi.', 'error'); const i = document.getElementById('adminPassword'); i.value = ''; i.focus(); i.classList.add('border-red-500'); setTimeout(() => i.classList.remove('border-red-500'), 1500); }
   });
   
-  window.openAdminDashboard = function() { document.getElementById('adminDashboard').classList.remove('hidden-modal'); document.body.style.overflow = 'hidden'; loadLeads(); loadProofs(); renderPromoForm(); renderPackagesTable(); renderTestimonialsAdmin(); renderProofsAdmin(); };
+  window.openAdminDashboard = function() { document.getElementById('adminDashboard').classList.remove('hidden-modal'); document.body.style.overflow = 'hidden'; loadLeads(); loadProofs(); renderPromoForm(); renderPackagesTable(); renderTestimonialsAdmin(); renderProofsAdmin(); renderPartnersAdmin(); renderHeroPicForm(); };
   window.closeAdminDashboard = function() { document.getElementById('adminDashboard').classList.add('hidden-modal'); document.body.style.overflow = ''; if (unsubscribeLeads) { unsubscribeLeads(); unsubscribeLeads = null; } if (unsubscribeProofs) { unsubscribeProofs(); unsubscribeProofs = null; } };
   window.logoutAdmin = function() { sessionStorage.removeItem('rian_admin_session'); closeAdminDashboard(); showToast('Anda telah logout', 'info'); };
   window.switchDashboardTab = function(tab) {
@@ -1026,10 +1106,41 @@ tailwind.config = {
     const id = document.getElementById('packageId').value;
     const pkgData = { category: document.getElementById('packageCategory').value, name: document.getElementById('packageName').value.trim(), speed: parseInt(document.getElementById('packageSpeed').value) || 0, originalPrice: parseInt(document.getElementById('packageOriginalPrice').value) || 0, promoPrice: parseInt(document.getElementById('packagePromoPrice').value) || 0, badge: document.getElementById('packageBadge').value.trim(), features: document.getElementById('packageFeatures').value.trim() };
     if (!pkgData.name || !pkgData.speed || !pkgData.promoPrice) { showToast('Mohon lengkapi Nama, Kecepatan, dan Harga Promo!', 'error'); return; }
-    if (id) { const idx = currentPackages.findIndex(p => p.id === id); if (idx !== -1) currentPackages[idx] = { ...currentPackages[idx], ...pkgData }; showToast('Paket berhasil diperbarui!', 'success'); } 
-    else { pkgData.id = 'pkg_' + Date.now(); currentPackages.push(pkgData); showToast('Paket baru berhasil ditambahkan!', 'success'); }
+    if (id) {
+      const idx = currentPackages.findIndex(p => p.id === id);
+      if (idx !== -1) currentPackages[idx] = { ...currentPackages[idx], ...pkgData };
+      showToast('Paket berhasil diperbarui!', 'success');
+    } else {
+      const maxOrder = Math.max(-1, ...currentPackages.filter(p => p.category === pkgData.category).map(p => p.order || 0));
+      pkgData.id = 'pkg_' + Date.now();
+      pkgData.order = maxOrder + 1;
+      currentPackages.push(pkgData);
+      showToast('Paket baru berhasil ditambahkan!', 'success');
+    }
     saveToStorage('packages', currentPackages); renderPackagesTable(); renderPackages(); resetPackageForm();
   });
+
+  window.movePackage = function(id, direction) {
+    const sortedPackages = [...currentPackages].sort((a, b) => (a.order || 0) - (b.order || 0));
+    const currentIndex = sortedPackages.findIndex(p => p.id === id);
+    const targetIndex = currentIndex + direction;
+    
+    if (targetIndex < 0 || targetIndex >= sortedPackages.length) return;
+    
+    const currentPkg = sortedPackages[currentIndex];
+    const targetPkg = sortedPackages[targetIndex];
+    
+    // Swap orders
+    const tempOrder = currentPkg.order;
+    currentPkg.order = targetPkg.order;
+    targetPkg.order = tempOrder;
+    
+    saveToStorage('packages', currentPackages);
+    renderPackagesTable();
+    renderPackages();
+    showToast('Urutan paket berhasil diubah!', 'success');
+  };
+  
   window.editPackage = function(id) {
     const pkg = currentPackages.find(p => p.id === id); if (!pkg) return;
     document.getElementById('packageId').value = pkg.id; document.getElementById('packageCategory').value = pkg.category; document.getElementById('packageName').value = pkg.name; document.getElementById('packageSpeed').value = pkg.speed; document.getElementById('packageOriginalPrice').value = pkg.originalPrice; document.getElementById('packagePromoPrice').value = pkg.promoPrice; document.getElementById('packageBadge').value = pkg.badge || ''; document.getElementById('packageFeatures').value = pkg.features;
@@ -1071,6 +1182,44 @@ tailwind.config = {
     document.getElementById('testimonialForm').reset(); document.getElementById('testimonialId').value = ''; document.getElementById('testimonialSubmitBtn').innerHTML = '<i class="fa-solid fa-plus mr-1.5"></i>Tambah Testimoni'; document.getElementById('testimonialCancelBtn').classList.add('hidden');
   };
 
+  // Partner Logo Logic
+  document.getElementById('partnerForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('partnerName').value.trim();
+    const url = document.getElementById('partnerUrl').value.trim();
+    if (!name || !url) { showToast('Nama dan URL logo wajib diisi!', 'error'); return; }
+    currentPartners.push({ id: 'pt_' + Date.now(), name, url });
+    saveToStorage('partners', currentPartners);
+    renderPartnersAdmin();
+    renderPartners();
+    document.getElementById('partnerForm').reset();
+    showToast('Logo partner berhasil ditambahkan!', 'success');
+  });
+  window.deletePartner = function(id) {
+    if (!confirm('Hapus logo partner ini?')) return;
+    currentPartners = currentPartners.filter(p => p.id !== id);
+    saveToStorage('partners', currentPartners);
+    renderPartnersAdmin();
+    renderPartners();
+    showToast('Logo partner dihapus', 'success');
+  };
+
+  // Hero Profile Pic Logic
+  function renderHeroPicForm() {
+    document.getElementById('heroPicInput').value = currentHeroPic;
+    document.getElementById('heroPicPreview').src = currentHeroPic;
+  }
+  document.getElementById('heroPicInput').addEventListener('input', (e) => {
+    document.getElementById('heroPicPreview').src = e.target.value;
+  });
+  document.getElementById('heroPicForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    currentHeroPic = document.getElementById('heroPicInput').value.trim();
+    saveToStorage('heroPic', currentHeroPic);
+    renderHeroPic();
+    showToast('Foto profil berhasil diperbarui!', 'success');
+  });
+
   window.exportLeads = function() {
     if (currentLeads.length === 0) { showToast('Tidak ada data untuk diexport', 'warning'); return; }
     const headers = ['Nama', 'No WA', 'Alamat', 'Provider', 'Tanggal', 'Status'];
@@ -1082,7 +1231,7 @@ tailwind.config = {
     showToast('Data leads berhasil diexport!', 'success');
   };
   
-  window.closeSuccessModal = function() { document.getElementById('successModal').classList.remove('hidden-modal'); };
+  window.closeSuccessModal = function() { document.getElementById('successModal').classList.add('hidden-modal'); };
   window.toggleMobileMenu = function() { document.getElementById('mobileMenu').classList.toggle('hidden-menu'); };
   
   const revealObserver = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } }); }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
@@ -1097,8 +1246,6 @@ tailwind.config = {
   // ============================================================
   // FIREBASE STORAGE INTEGRATION (Upload Bukti Pemasangan)
   // ============================================================
-  
-  // Load Proofs dari Firestore secara real-time
   function loadProofs() {
     if (db && window._firebase) {
       const { collection, onSnapshot, query, orderBy } = window._firebase;
@@ -1106,41 +1253,30 @@ tailwind.config = {
       unsubscribeProofs = onSnapshot(q, (snap) => {
         currentProofs = [];
         snap.forEach(d => currentProofs.push({ id: d.id, ...d.data() }));
-        renderInstallations(); // Update halaman depan
-        renderProofsAdmin(); // Update dashboard admin
+        renderInstallations();
+        renderProofsAdmin();
       });
     } else {
-      // Fallback Demo Mode (localStorage)
       currentProofs = loadFromStorage('proofs', DEFAULT_PROOFS);
       renderInstallations();
       renderProofsAdmin();
     }
   }
 
-  // Handle Upload Form Submit
   document.getElementById('uploadProofForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const fileInput = document.getElementById('proofImageInput');
     const locationInput = document.getElementById('proofLocationInput');
     
-    if (!fileInput.files[0]) {
-      showToast('Pilih gambar terlebih dahulu!', 'warning');
-      return;
-    }
+    if (!fileInput.files[0]) { showToast('Pilih gambar terlebih dahulu!', 'warning'); return; }
     
     const file = fileInput.files[0];
     const location = locationInput.value.trim() || 'Lokasi';
     
-    // Mode Demo (Tanpa Firebase)
     if (!db || !window._firebase) {
       const reader = new FileReader();
       reader.onload = function() {
-        const proofData = { 
-          id: 'proof_' + Date.now(), 
-          url: reader.result, 
-          location: location, 
-          createdAt: new Date().toISOString() 
-        };
+        const proofData = { id: 'proof_' + Date.now(), url: reader.result, location: location, createdAt: new Date().toISOString() };
         currentProofs.unshift(proofData);
         saveToStorage('proofs', currentProofs);
         renderInstallations();
@@ -1152,61 +1288,37 @@ tailwind.config = {
       return;
     }
 
-    // Mode Produksi (Firebase Storage)
     const { storage, ref, uploadBytes, getDownloadURL, collection, addDoc } = window._firebase;
-    
     showToast('Mengupload gambar ke Firebase Storage...', 'info');
     
     try {
-      // 1. Buat referensi file di Firebase Storage
       const storageRef = ref(storage, `proofs/${Date.now()}_${file.name}`);
-      
-      // 2. Upload file
       const snapshot = await uploadBytes(storageRef, file);
-      
-      // 3. Dapatkan URL publik
       const downloadURL = await getDownloadURL(snapshot.ref);
-      
-      // 4. Simpan URL ke Firestore collection 'proofs'
-      const proofData = {
-        url: downloadURL,
-        location: location,
-        createdAt: new Date().toISOString()
-      };
+      const proofData = { url: downloadURL, location: location, createdAt: new Date().toISOString() };
       await addDoc(collection(db, 'proofs'), proofData);
-      
-      // onSnapshot akan otomatis memperbarui UI, jadi tidak perlu manual render di sini
       showToast('Foto berhasil diupload & ditampilkan di web!', 'success');
       document.getElementById('uploadProofForm').reset();
-      
     } catch (error) {
       console.error('Error upload to Firebase Storage:', error);
       showToast('Gagal upload gambar. Pastikan Firebase Storage sudah diaktifkan.', 'error');
     }
   });
 
-  // Handle Delete Proof
   window.deleteProof = async function(id) {
     if (!confirm('Hapus foto ini dari web?')) return;
-    
     const proof = currentProofs.find(p => p.id === id);
-    
     if (db && window._firebase && proof) {
       const { doc, deleteDoc, storage, ref, deleteObject } = window._firebase;
       try {
-        // Hapus file dari Storage
         const fileRef = ref(storage, proof.url); 
         await deleteObject(fileRef).catch(e => console.log("File storage tidak bisa dihapus langsung via URL, lanjut hapus doc."));
-        
-        // Hapus data dari Firestore
         await deleteDoc(doc(db, 'proofs', id));
-        // onSnapshot akan auto update UI
       } catch (error) {
         console.error('Error delete proof:', error);
         showToast('Gagal menghapus foto.', 'error');
       }
     } else {
-      // Demo Mode
       currentProofs = currentProofs.filter(p => p.id !== id);
       saveToStorage('proofs', currentProofs);
       renderInstallations();
@@ -1217,8 +1329,7 @@ tailwind.config = {
   
   function init() {
     const canvas = document.getElementById('networkCanvas'); if (canvas) new NetworkBackground(canvas);
-    renderPackages(); renderTestimonials(); updatePromoBanner(); loadProofs();
-    // loadProofs dipanggil saat dashboard dibuka
+    renderPackages(); renderTestimonials(); updatePromoBanner(); renderPartners(); renderHeroPic();
     if (sessionStorage.getItem('rian_admin_session') === 'active') openAdminDashboard();
     console.log('%c🚀 Rian WiFi Specialist Website Loaded', 'color: #FF6B35; font-weight: bold; font-size: 14px;');
   }
