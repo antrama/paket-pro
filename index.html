@@ -28,7 +28,17 @@ tailwind.config = {
 </script>
 
 <style>
-  body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050B1E; color: #E5E7EB; overflow-x: hidden; }
+    html, body { 
+    max-width: 100vw; 
+    overflow-x: hidden; 
+    margin: 0; 
+    padding: 0;
+    box-sizing: border-box;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  
+  /* Force long text to wrap on mobile to prevent stretching */
+  .break-words { word-break: break-word; overflow-wrap: break-word; }
   .font-display { font-family: 'Sora', sans-serif; }
   .gradient-text { background: linear-gradient(135deg, #FF6B35 0%, #FFB627 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
   .glass { background: rgba(17, 27, 71, 0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
@@ -187,9 +197,9 @@ tailwind.config = {
           <a href="https://wa.me/6281234567890?text=Halo%20Rian%2C%20saya%20mau%20konsultasi%20paket%20WiFi" target="_blank" class="btn-secondary px-7 py-3.5 rounded-xl font-bold text-sm sm:text-base flex items-center justify-center gap-2"><i class="fa-brands fa-whatsapp text-green-400 text-lg"></i>Konsultasi WA</a>
         </div>
         <div class="grid grid-cols-3 gap-4 sm:gap-6 max-w-md mx-auto lg:mx-0">
-          <div class="text-center lg:text-left"><div class="font-display font-bold text-2xl sm:text-3xl text-white" data-counter="500">0</div><div class="text-[10px] sm:text-xs text-gray-500 font-medium tracking-wider mt-1">PELANGGAN TERPASANG</div></div>
-          <div class="text-center lg:text-left"><div class="font-display font-bold text-2xl sm:text-3xl gradient-text" data-counter="4.9" data-decimal="1">0</div><div class="text-[10px] sm:text-xs text-gray-500 font-medium tracking-wider mt-1">RATING KEPUASAN</div></div>
-          <div class="text-center lg:text-left"><div class="font-display font-bold text-2xl sm:text-3xl text-white" data-counter="15">0</div><div class="text-[10px] sm:text-xs text-gray-500 font-medium tracking-wider mt-1">KOTA COVERAGE</div></div>
+        <div class="text-center lg:text-left"><div class="font-display font-bold text-2xl sm:text-3xl text-white" data-counter="500">0</div><div class="text-[10px] sm:text-xs text-gray-500 font-medium tracking-wider mt-1 break-words leading-tight">PELANGGAN TERPASANG</div></div>
+        <div class="text-center lg:text-left"><div class="font-display font-bold text-2xl sm:text-3xl gradient-text" data-counter="4.9" data-decimal="1">0</div><div class="text-[10px] sm:text-xs text-gray-500 font-medium tracking-wider mt-1 break-words leading-tight">RATING KEPUASAN</div></div>
+        <div class="text-center lg:text-left"><div class="font-display font-bold text-2xl sm:text-3xl text-white" data-counter="15">0</div><div class="text-[10px] sm:text-xs text-gray-500 font-medium tracking-wider mt-1 break-words leading-tight">KOTA COVERAGE</div></div>
         </div>
       </div>
       <div class="relative flex justify-center lg:justify-end fade-up" style="animation-delay: 0.2s;">
