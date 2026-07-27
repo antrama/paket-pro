@@ -28,15 +28,7 @@ tailwind.config = {
 </script>
 
 <style>
-  /* PERBAIKAN CSS DARI ANALISIS ANDA */
-  html, body { 
-    font-family: 'Plus Jakarta Sans', sans-serif; 
-    background: #050B1E; 
-    color: #E5E7EB; 
-    overflow-x: hidden; 
-    width: 100%;
-    max-width: 100vw;
-  }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050B1E; color: #E5E7EB; overflow-x: hidden; }
   .font-display { font-family: 'Sora', sans-serif; }
   .gradient-text { background: linear-gradient(135deg, #FF6B35 0%, #FFB627 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
   .glass { background: rgba(17, 27, 71, 0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
@@ -85,29 +77,23 @@ tailwind.config = {
   html { scroll-behavior: smooth; }
   .menu-overlay { transition: opacity 0.3s ease, visibility 0.3s ease; }
   .menu-overlay.hidden-menu { opacity: 0; visibility: hidden; pointer-events: none; }
-  
-  /* PERBAIKAN MODAL DARI ANALISIS ANDA */
   .modal-overlay { transition: opacity 0.3s ease, visibility 0.3s ease; }
-  .modal-overlay.hidden-modal { 
-    display: none !important; /* Tambahan wajib agar tidak merusak lebar layar HP */
-    opacity: 0; 
-    visibility: hidden; 
-    pointer-events: none; 
-  }
+  .modal-overlay.hidden-modal { opacity: 0; visibility: hidden; pointer-events: none; }
   
   .marquee-track { animation: marquee 30s linear infinite; }
   @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   
+    /* Sebelumnya ada filter grayscale dan opacity, kita hapus */
   .partner-logo { 
-    background: rgba(255, 255, 255, 0.92); 
-    padding: 8px 12px; 
-    border-radius: 10px; 
-    box-shadow: 0 4px 15px rgba(0, 217, 255, 0.15); 
+    background: rgba(255, 255, 255, 0.92); /* Latar belakang putih agar logo gelap terlihat */
+    padding: 8px 12px; /* Memberi jarak di dalam logo agar tidak mepet */
+    border-radius: 10px; /* Membuat sudut membulat */
+    box-shadow: 0 4px 15px rgba(0, 217, 255, 0.15); /* Efek bersinar/silau lembut */
     transition: all 0.3s ease; 
   }
   .partner-logo:hover { 
-    background: #ffffff; 
-    box-shadow: 0 6px 20px rgba(0, 217, 255, 0.3); 
+    background: #ffffff; /* Putih penuh saat di-hover */
+    box-shadow: 0 6px 20px rgba(0, 217, 255, 0.3); /* Efek bersinar lebih kuat saat di-hover */
     transform: scale(1.05); 
   }
   
@@ -608,6 +594,7 @@ tailwind.config = {
 
       <!-- Content Management Tab -->
       <div id="dashTab-content" class="dash-content hidden">
+        
         <div class="grid lg:grid-cols-2 gap-6 mb-6">
           <!-- Hero Profile Pic Management -->
           <div class="glass rounded-2xl p-6">
@@ -644,7 +631,7 @@ tailwind.config = {
             </form>
             <div id="partnersListAdmin" class="space-y-2 max-h-[200px] overflow-y-auto pr-2"></div>
           </div>
-        </div>
+        </div> <!-- INI DIV YANG HILANG SEBELUMNYA -->
 
         <!-- Testimonials Management -->
         <div class="glass rounded-2xl p-6 mb-6">
@@ -714,6 +701,7 @@ tailwind.config = {
           <h4 class="text-sm font-bold text-gray-300 mb-3">Daftar Foto Pemasangan</h4>
           <div id="proofsListAdmin" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
         </div>
+
       </div>
     </div>
   </div>
@@ -750,19 +738,18 @@ tailwind.config = {
   const SALES_WA_NUMBER = "6281234567890";
   const IS_DEMO_MODE = firebaseConfig.apiKey.includes("YOUR_");
   
-  let db = null, storage = null;
-  let unsubLeads, unsubProofs, unsubPackages, unsubTesti, unsubPartners, unsubPromo, unsubHero;
+  let db = null, storage = null, unsubscribeLeads = null, unsubscribeProofs = null;
   
   if (!IS_DEMO_MODE) {
     try {
       const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js");
-      const { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy, setDoc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+      const { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
       const { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js");
       
       const app = initializeApp(firebaseConfig);
       db = getFirestore(app);
       storage = getStorage(app);
-      window._firebase = { db, storage, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy, ref, uploadBytes, getDownloadURL, deleteObject, setDoc, getDoc };
+      window._firebase = { db, storage, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy, ref, uploadBytes, getDownloadURL, deleteObject };
       console.log("✅ Firebase initialized (Firestore + Storage)");
     } catch (e) { console.warn("⚠️ Firebase failed, demo mode:", e); }
   } else {
@@ -782,23 +769,31 @@ tailwind.config = {
   const DEFAULT_TESTIMONIALS = [
     { id: 't1', name: 'Andi Pratama', location: 'Bekasi, Jawa Barat', rating: 5, text: 'Pemasangannya cepat banget, kurang dari 1 hari sudah beres. Rian juga sangat helpful, jelasin tiap paket dengan detail. Recommended!', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&q=80' },
     { id: 't2', name: 'Siti Nurhaliza', location: 'Depok, Jawa Barat', rating: 5, text: 'Awalnya ragu mau pasang WiFi rumah, tapi setelah lihat testimoni akhirnya coba. Hasilnya memuaskan, internet stabil dan harga bersaing.', photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&q=80' },
-    { id: 't3', name: 'Budi Santoso', location: 'Tangerang, Banten', rating: 5, text: 'Saya pakai paket Biznet Biz untuk usaha. Bandwidth stabil, jarang down. Salesnya responsif kalau ada pertanyaan. Mantap!', photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&q=80' }
+    { id: 't3', name: 'Budi Santoso', location: 'Tangerang, Banten', rating: 5, text: 'Saya pakai paket Biznet Biz untuk usaha. Bandwidth stabil, jarang down. Salesnya responsif kalau ada pertanyaan. Mantap!', photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&q=80' },
+    { id: 't4', name: 'Dewi Lestari', location: 'Jakarta Selatan', rating: 5, text: 'Prosesnya transparan dari awal sampai akhir. Tidak ada biaya tersembunyi. Modem gratis dan instalasinya rapi. Terima kasih Rian!', photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&q=80' },
+    { id: 't5', name: 'Rudi Hartono', location: 'Bogor, Jawa Barat', rating: 5, text: 'Sebelumnya pakai provider lain sering down. Setelah pindah ke IndiHome via Rian, alhamdulillah stabil. Anak-anak senang bisa belajar online lancar.', photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&q=80' },
+    { id: 't6', name: 'Maya Sari', location: 'Jakarta Timur', rating: 5, text: 'Pelayanan ramah, fast response. Salesnya bantu cek coverage dulu sebelum pasang, jadi tidak sia-sia. Paket MyRepublic-nya kenceng banget!', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&q=80' }
   ];
   const DEFAULT_PROOFS = [
-    { id: 'pr1', url: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=400&h=400&fit=crop&q=80', location: 'Bekasi', createdAt: new Date(Date.now() - 86400000 * 2).toISOString() }
+    { id: 'pr1', url: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=400&h=400&fit=crop&q=80', location: 'Bekasi', createdAt: new Date(Date.now() - 86400000 * 2).toISOString() },
+    { id: 'pr2', url: 'https://images.unsplash.com/photo-1551446591-142875a901a1?w=400&h=400&fit=crop&q=80', location: 'Depok', createdAt: new Date(Date.now() - 86400000 * 3).toISOString() },
+    { id: 'pr3', url: 'https://images.unsplash.com/photo-1563850571660-8ad79d2a46d3?w=400&h=400&fit=crop&q=80', location: 'Tangerang', createdAt: new Date(Date.now() - 86400000 * 4).toISOString() },
+    { id: 'pr4', url: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400&h=400&fit=crop&q=80', location: 'Jakarta', createdAt: new Date(Date.now() - 86400000 * 5).toISOString() }
   ];
   const DEFAULT_PARTNERS = [
-    { id: 'pt1', name: 'IndiHome', url: 'https://placehold.co/180x60/0A1230/FFFFFF?text=INDIHOME&font=montserrat' }
+    { id: 'pt1', name: 'IndiHome', url: 'https://placehold.co/180x60/0A1230/FFFFFF?text=INDIHOME&font=montserrat' },
+    { id: 'pt2', name: 'Biznet', url: 'https://placehold.co/180x60/0A1230/FFFFFF?text=BIZNET&font=montserrat' },
+    { id: 'pt3', name: 'MyRepublic', url: 'https://placehold.co/180x60/0A1230/FFFFFF?text=MYREPUBLIC&font=montserrat' }
   ];
   const DEFAULT_HERO_PIC = 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=600&fit=crop&q=80';
   
   let currentLeads = [];
-  let currentPackages = [];
-  let currentPromo = {};
-  let currentProofs = [];
-  let currentTestimonials = [];
-  let currentPartners = [];
-  let currentHeroPic = DEFAULT_HERO_PIC;
+  let currentPackages = loadFromStorage('packages', DEFAULT_PACKAGES);
+  let currentPromo = loadFromStorage('promo', DEFAULT_PROMO);
+  let currentProofs = loadFromStorage('proofs', DEFAULT_PROOFS);
+  let currentTestimonials = loadFromStorage('testimonials', DEFAULT_TESTIMONIALS);
+  let currentPartners = loadFromStorage('partners', DEFAULT_PARTNERS);
+  let currentHeroPic = loadFromStorage('heroPic', DEFAULT_HERO_PIC);
   
   function loadFromStorage(key, defaultValue) { try { const s = localStorage.getItem(`rian_${key}`); return s ? JSON.parse(s) : defaultValue; } catch { return defaultValue; } }
   function saveToStorage(key, value) { try { localStorage.setItem(`rian_${key}`, JSON.stringify(value)); } catch (e) { console.error(e); } }
@@ -909,7 +904,7 @@ tailwind.config = {
     const marquee = document.getElementById('partnerMarquee');
     if(!marquee) return;
     const logosHtml = currentPartners.map(p => `
-      <img src="${escapeHtml(p.url)}" alt="Logo ${escapeHtml(p.name)}" class="partner-logo h-16 sm:h-20 w-auto object-contain">
+      <img src="${escapeHtml(p.url)}" alt="Logo ${escapeHtml(p.name)}" class="partner-logo h-32 sm:h-40 w-auto object-contain">
     `).join('');
     marquee.innerHTML = `
       <div class="flex gap-10 sm:gap-16 items-center px-8">${logosHtml}</div>
@@ -923,10 +918,116 @@ tailwind.config = {
   }
 
   // Admin Renderers
-  function renderTestimonialsAdmin() { /* Isi sama seperti sebelumnya */ }
-  function renderProofsAdmin() { /* Isi sama seperti sebelumnya */ }
-  function renderPackagesTable() { /* Isi sama seperti sebelumnya */ }
-  function renderPartnersAdmin() { /* Isi sama seperti sebelumnya */ }
+  function renderTestimonialsAdmin() {
+    const tbody = document.getElementById('testimonialsTableBody');
+    tbody.innerHTML = '';
+    if (currentTestimonials.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="4" class="text-center py-8 text-gray-400">Belum ada testimoni.</td></tr>`;
+      return;
+    }
+    currentTestimonials.forEach(t => {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-white/5 hover:bg-white/[0.02] transition';
+      tr.innerHTML = `<td class="px-3 py-3"><div class="font-bold text-white text-sm">${escapeHtml(t.name)}</div><div class="text-[10px] text-gray-500">${escapeHtml(t.location)}</div></td><td class="px-3 py-3 text-xs text-gray-300">${t.rating} <i class="fa-solid fa-star text-accent-yellow ml-1"></i></td><td class="px-3 py-3 text-xs text-gray-400 max-w-[300px] truncate">${escapeHtml(t.text)}</td><td class="px-3 py-3 text-right"><div class="flex items-center justify-end gap-1.5"><button onclick="editTestimonial('${t.id}')" class="px-2.5 py-1.5 rounded-lg bg-accent-cyan/20 text-accent-cyan hover:bg-accent-cyan/30 border border-accent-cyan/30 transition text-[11px] font-semibold"><i class="fa-solid fa-pen"></i></button><button onclick="deleteTestimonial('${t.id}')" class="px-2.5 py-1.5 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30 transition text-[11px] font-semibold"><i class="fa-solid fa-trash"></i></button></div></td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderProofsAdmin() {
+    const grid = document.getElementById('proofsListAdmin');
+    grid.innerHTML = '';
+    if (currentProofs.length === 0) {
+      grid.innerHTML = `<div class="col-span-full text-center py-8 text-gray-400 text-xs">Belum ada foto. Upload baru di form atas.</div>`;
+      return;
+    }
+    currentProofs.forEach(p => {
+      const item = document.createElement('div');
+      item.className = 'relative aspect-square rounded-xl overflow-hidden group';
+      item.innerHTML = `<img src="${p.url}" alt="Bukti Pemasangan" class="w-full h-full object-cover"><div class="absolute inset-0 bg-navy-950/60 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center gap-2"><button onclick="deleteProof('${p.id}')" class="px-3 py-1.5 rounded-lg bg-red-500/80 text-white text-[11px] font-bold hover:bg-red-500 transition flex items-center gap-1"><i class="fa-solid fa-trash"></i> Hapus</button></div>`;
+      grid.appendChild(item);
+    });
+  }
+
+  function renderPackagesTable() {
+    const tbody = document.getElementById('packagesTableBody');
+    tbody.innerHTML = '';
+    const sortedPackages = [...currentPackages].sort((a, b) => {
+      if (a.category !== b.category) {
+        return a.category === 'personal' ? -1 : 1;
+      }
+      return (a.order || 0) - (b.order || 0);
+    });
+
+    if (sortedPackages.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-gray-400">Belum ada paket.</td></tr>`;
+      return;
+    }
+
+    const personalPkgs = sortedPackages.filter(p => p.category === 'personal');
+    const businessPkgs = sortedPackages.filter(p => p.category === 'business');
+
+    sortedPackages.forEach((pkg) => {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-white/5 hover:bg-white/[0.02] transition';
+      const catLabel = pkg.category === 'personal' ? 'Rumah' : 'Bisnis';
+      
+      const currentList = pkg.category === 'personal' ? personalPkgs : businessPkgs;
+      const idx = currentList.findIndex(p => p.id === pkg.id);
+      const isFirst = idx === 0;
+      const isLast = idx === currentList.length - 1;
+
+      tr.innerHTML = `
+        <td class="px-3 py-3">
+          <div class="flex items-center gap-1">
+            <button onclick="movePackage('${pkg.id}', -1)" ${isFirst ? 'disabled' : ''} class="w-6 h-6 rounded flex items-center justify-center ${isFirst ? 'text-gray-700 cursor-not-allowed' : 'text-gray-400 hover:bg-white/10'}">
+              <i class="fa-solid fa-arrow-up text-[10px]"></i>
+            </button>
+            <button onclick="movePackage('${pkg.id}', 1)" ${isLast ? 'disabled' : ''} class="w-6 h-6 rounded flex items-center justify-center ${isLast ? 'text-gray-700 cursor-not-allowed' : 'text-gray-400 hover:bg-white/10'}">
+              <i class="fa-solid fa-arrow-down text-[10px]"></i>
+            </button>
+          </div>
+        </td>
+        <td class="px-3 py-3">
+          <div class="font-bold text-white text-sm">${escapeHtml(pkg.name)}</div>
+          ${pkg.badge ? `<span class="inline-block mt-1 px-2 py-0.5 rounded bg-accent-orange/20 text-accent-orange text-[9px] font-bold">${escapeHtml(pkg.badge)}</span>` : ''}
+        </td>
+        <td class="px-3 py-3 text-xs text-gray-300">${catLabel}</td>
+        <td class="px-3 py-3 text-xs text-gray-300">${pkg.speed} Mbps</td>
+        <td class="px-3 py-3 text-xs text-gray-300">
+          <div class="text-gray-500 line-through">Rp ${formatRupiah(pkg.originalPrice)}</div>
+          <div class="text-white font-bold">Rp ${formatRupiah(pkg.promoPrice)}</div>
+        </td>
+        <td class="px-3 py-3 text-right">
+          <div class="flex items-center justify-end gap-1.5">
+            <button onclick="editPackage('${pkg.id}')" class="px-2.5 py-1.5 rounded-lg bg-accent-cyan/20 text-accent-cyan hover:bg-accent-cyan/30 border border-accent-cyan/30 transition text-[11px] font-semibold"><i class="fa-solid fa-pen"></i></button>
+            <button onclick="deletePackage('${pkg.id}')" class="px-2.5 py-1.5 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30 transition text-[11px] font-semibold"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderPartnersAdmin() {
+    const list = document.getElementById('partnersListAdmin');
+    list.innerHTML = '';
+    if (currentPartners.length === 0) {
+      list.innerHTML = `<div class="text-center py-4 text-gray-400 text-xs">Belum ada logo partner.</div>`;
+      return;
+    }
+    currentPartners.forEach(p => {
+      const item = document.createElement('div');
+      item.className = 'flex items-center justify-between bg-navy-800/50 rounded-lg p-2';
+      item.innerHTML = `
+        <div class="flex items-center gap-2">
+          <img src="${p.url}" alt="${p.name}" class="h-6 w-auto rounded object-contain bg-white/5 p-0.5">
+          <span class="text-xs text-white font-semibold">${p.name}</span>
+        </div>
+        <button onclick="deletePartner('${p.id}')" class="text-red-400 hover:bg-red-500/20 px-2 py-1 rounded text-[10px]"><i class="fa-solid fa-trash"></i></button>
+      `;
+      list.appendChild(item);
+    });
+  }
 
   // Form Handlers
   document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -940,330 +1041,446 @@ tailwind.config = {
   });
   
   const coverageForm = document.getElementById('coverageForm');
+  const coverageSubmitBtn = document.getElementById('coverageSubmitBtn');
   coverageForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(coverageForm);
     const lead = { name: formData.get('name').trim(), phone: formData.get('phone').trim(), address: formData.get('address').trim(), provider: formData.get('provider'), status: 'new', createdAt: new Date().toISOString() };
+    coverageSubmitBtn.disabled = true;
+    coverageSubmitBtn.querySelector('.btn-text').classList.add('hidden');
+    coverageSubmitBtn.querySelector('.btn-loading').classList.remove('hidden');
     try {
-      if (db && window._firebase) { const { collection, addDoc } = window._firebase; await addDoc(collection(db, 'leads'), lead); }
-      else { const leads = loadFromStorage('leads', []); lead.id = 'lead_' + Date.now(); leads.unshift(lead); saveToStorage('leads', leads); }
+      await saveLead(lead);
       document.getElementById('successModal').classList.remove('hidden-modal');
       coverageForm.reset(); document.getElementById('provider-indihome').checked = true;
       const waText = `Halo Rian, saya ${lead.name} dari ${lead.address}. Saya sudah isi form cek coverage untuk provider ${lead.provider}. Mohon info ketersediaan layanannya. Terima kasih.`;
       document.getElementById('successWABtn').href = `https://wa.me/${SALES_WA_NUMBER}?text=${encodeURIComponent(waText)}`;
       showToast('Data lead berhasil disimpan!', 'success');
-    } catch (error) { showToast('Gagal menyimpan data.', 'error'); }
+    } catch (error) { console.error(error); showToast('Gagal menyimpan data. Silakan coba lagi.', 'error'); }
+    finally { coverageSubmitBtn.disabled = false; coverageSubmitBtn.querySelector('.btn-text').classList.remove('hidden'); coverageSubmitBtn.querySelector('.btn-loading').classList.add('hidden'); }
   });
   
-  // ============================================================
-  // FUNGSI LOAD REALTIME FIRESTORE (PERBAIKAN UTAMA)
-  // ============================================================
-  function loadAllData() {
-    if (db && window._firebase) {
-      const { collection, onSnapshot, doc, getDoc } = window._firebase;
-      
-      // Load Leads
-      unsubLeads = onSnapshot(collection(db, 'leads'), (snap) => {
-        currentLeads = []; snap.forEach(d => currentLeads.push({ id: d.id, ...d.data() }));
-        renderLeadsTable(); updateStats();
-      });
-
-      // Load Proofs
-      unsubProofs = onSnapshot(collection(db, 'proofs'), (snap) => {
-        currentProofs = []; snap.forEach(d => currentProofs.push({ id: d.id, ...d.data() }));
-        renderInstallations(); renderProofsAdmin();
-      });
-
-      // Load Packages
-      unsubPackages = onSnapshot(collection(db, 'packages'), (snap) => {
-        currentPackages = []; snap.forEach(d => currentPackages.push({ id: d.id, ...d.data() }));
-        renderPackages(); renderPackagesTable();
-      });
-
-      // Load Testimonials
-      unsubTesti = onSnapshot(collection(db, 'testimonials'), (snap) => {
-        currentTestimonials = []; snap.forEach(d => currentTestimonials.push({ id: d.id, ...d.data() }));
-        renderTestimonials(); renderTestimonialsAdmin();
-      });
-
-      // Load Partners
-      unsubPartners = onSnapshot(collection(db, 'partners'), (snap) => {
-        currentPartners = []; snap.forEach(d => currentPartners.push({ id: d.id, ...d.data() }));
-        renderPartners(); renderPartnersAdmin();
-      });
-
-      // Load Promo (Single Doc)
-      unsubPromo = onSnapshot(doc(db, 'settings', 'promo'), (snap) => {
-        if (snap.exists()) currentPromo = snap.data();
-        renderPromoForm(); updatePromoBanner();
-      });
-
-      // Load Hero Pic (Single Doc)
-      unsubHero = onSnapshot(doc(db, 'settings', 'heroPic'), (snap) => {
-        if (snap.exists()) currentHeroPic = snap.data().url;
-        renderHeroPic(); renderHeroPicForm();
-      });
-
-    } else {
-      // Mode Demo (localStorage)
-      currentLeads = loadFromStorage('leads', []);
-      currentProofs = loadFromStorage('proofs', DEFAULT_PROOFS);
-      currentPackages = loadFromStorage('packages', DEFAULT_PACKAGES);
-      currentTestimonials = loadFromStorage('testimonials', DEFAULT_TESTIMONIALS);
-      currentPartners = loadFromStorage('partners', DEFAULT_PARTNERS);
-      currentPromo = loadFromStorage('promo', DEFAULT_PROMO);
-      currentHeroPic = loadFromStorage('heroPic', DEFAULT_HERO_PIC);
-
-      renderLeadsTable(); updateStats();
-      renderInstallations(); renderProofsAdmin();
-      renderPackages(); renderPackagesTable();
-      renderTestimonials(); renderTestimonialsAdmin();
-      renderPartners(); renderPartnersAdmin();
-      renderPromoForm(); updatePromoBanner();
-      renderHeroPic(); renderHeroPicForm();
-    }
+  async function saveLead(lead) {
+    if (db && window._firebase) { const { collection, addDoc } = window._firebase; await addDoc(collection(db, 'leads'), lead); }
+    else { const leads = loadFromStorage('leads', []); lead.id = 'lead_' + Date.now(); leads.unshift(lead); saveToStorage('leads', leads); }
   }
-
-  // ============================================================
-  // FUNGSI SAVE/UPDATE/DELETE KE FIRESTORE (PERBAIKAN UTAMA)
-  // ============================================================
-
-  // Promo Form
-  document.getElementById('promoForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const promoData = { text: document.getElementById('promoTextInput').value, desc: document.getElementById('promoDescInput').value };
+  
+  function loadLeads() {
     if (db && window._firebase) {
-      const { doc, setDoc } = window._firebase;
-      await setDoc(doc(db, 'settings', 'promo'), promoData);
-    } else {
-      currentPromo = promoData; saveToStorage('promo', currentPromo); updatePromoBanner();
-    }
-    showToast('Banner promo berhasil disimpan!', 'success');
-  });
-
-  // Package Form
-  document.getElementById('packageForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const id = document.getElementById('packageId').value;
-    const pkgData = { category: document.getElementById('packageCategory').value, name: document.getElementById('packageName').value.trim(), speed: parseInt(document.getElementById('packageSpeed').value) || 0, originalPrice: parseInt(document.getElementById('packageOriginalPrice').value) || 0, promoPrice: parseInt(document.getElementById('packagePromoPrice').value) || 0, badge: document.getElementById('packageBadge').value.trim(), features: document.getElementById('packageFeatures').value.trim() };
-    
-    if (!pkgData.name || !pkgData.speed || !pkgData.promoPrice) { showToast('Lengkapi data!', 'error'); return; }
-    
-    if (db && window._firebase) {
-      const { collection, addDoc, doc, setDoc } = window._firebase;
-      if (id) { await setDoc(doc(db, 'packages', id), pkgData, { merge: true }); }
-      else { await addDoc(collection(db, 'packages'), pkgData); }
-    } else {
-      if (id) { const idx = currentPackages.findIndex(p => p.id === id); if (idx !== -1) currentPackages[idx] = { ...currentPackages[idx], ...pkgData }; }
-      else { pkgData.id = 'pkg_' + Date.now(); currentPackages.push(pkgData); }
-      saveToStorage('packages', currentPackages); renderPackagesTable(); renderPackages();
-    }
-    resetPackageForm();
-    showToast('Paket berhasil disimpan!', 'success');
-  });
-
-  window.movePackage = async function(id, direction) {
-    const pkgToMove = currentPackages.find(p => p.id === id);
-    if (!pkgToMove) return;
-    const categoryPackages = currentPackages.filter(p => p.category === pkgToMove.category).sort((a, b) => (a.order || 0) - (b.order || 0));
-    const currentIndex = categoryPackages.findIndex(p => p.id === id);
-    const targetIndex = currentIndex + direction;
-    if (targetIndex < 0 || targetIndex >= categoryPackages.length) return;
-    
-    const targetPkg = categoryPackages[targetIndex];
-    const tempOrder = pkgToMove.order || 0;
-    pkgToMove.order = targetPkg.order || 0;
-    targetPkg.order = tempOrder;
-
-    if (db && window._firebase) {
-      const { doc, updateDoc } = window._firebase;
-      await updateDoc(doc(db, 'packages', pkgToMove.id), { order: pkgToMove.order });
-      await updateDoc(doc(db, 'packages', targetPkg.id), { order: targetPkg.order });
-    } else {
-      saveToStorage('packages', currentPackages); renderPackagesTable(); renderPackages();
-    }
-    showToast('Urutan paket berhasil diubah!', 'success');
-  };
-
-  window.deletePackage = async function(id) {
-    if (!confirm('Hapus paket ini?')) return;
-    if (db && window._firebase) { const { doc, deleteDoc } = window._firebase; await deleteDoc(doc(db, 'packages', id)); }
-    else { currentPackages = currentPackages.filter(p => p.id !== id); saveToStorage('packages', currentPackages); renderPackagesTable(); renderPackages(); }
-    showToast('Paket dihapus', 'success');
-  };
-
-  // Testimonial Form
-  document.getElementById('testimonialForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const id = document.getElementById('testimonialId').value;
-    const tData = { name: document.getElementById('testimonialName').value.trim(), location: document.getElementById('testimonialLocation').value.trim(), rating: parseInt(document.getElementById('testimonialRating').value) || 5, text: document.getElementById('testimonialText').value.trim(), photo: document.getElementById('testimonialPhoto').value.trim() };
-    
-    if (db && window._firebase) {
-      const { collection, addDoc, doc, setDoc } = window._firebase;
-      if (id) { await setDoc(doc(db, 'testimonials', id), tData, { merge: true }); }
-      else { await addDoc(collection(db, 'testimonials'), tData); }
-    } else {
-      if (id) { const idx = currentTestimonials.findIndex(t => t.id === id); if (idx !== -1) currentTestimonials[idx] = { ...currentTestimonials[idx], ...tData }; }
-      else { tData.id = 'tst_' + Date.now(); currentTestimonials.push(tData); }
-      saveToStorage('testimonials', currentTestimonials); renderTestimonialsAdmin(); renderTestimonials();
-    }
-    resetTestimonialForm();
-    showToast('Testimoni disimpan!', 'success');
-  });
-
-  window.deleteTestimonial = async function(id) {
-    if (!confirm('Hapus testimoni ini?')) return;
-    if (db && window._firebase) { const { doc, deleteDoc } = window._firebase; await deleteDoc(doc(db, 'testimonials', id)); }
-    else { currentTestimonials = currentTestimonials.filter(t => t.id !== id); saveToStorage('testimonials', currentTestimonials); renderTestimonialsAdmin(); renderTestimonials(); }
-    showToast('Testimoni dihapus', 'success');
-  };
-
-  // Partner Form
-  document.getElementById('partnerForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const name = document.getElementById('partnerName').value.trim();
-    const fileInput = document.getElementById('partnerLogoInput');
-    if (!name || !fileInput.files[0]) { showToast('Nama dan file logo wajib diisi!', 'error'); return; }
-    
-    const file = fileInput.files[0];
-    const submitBtn = document.getElementById('partnerSubmitBtn');
-    submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1.5"></i>Uploading...';
-    submitBtn.disabled = true;
-
-    try {
-      let downloadURL = '';
-      if (db && window._firebase) {
-        const { storage, ref, uploadBytes, getDownloadURL, collection, addDoc } = window._firebase;
-        const storageRef = ref(storage, `partners/${Date.now()}_${file.name}`);
-        const snapshot = await uploadBytes(storageRef, file);
-        downloadURL = await getDownloadURL(snapshot.ref);
-        await addDoc(collection(db, 'partners'), { name, url: downloadURL });
-      } else {
-        downloadURL = await new Promise((resolve) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.readAsDataURL(file); });
-        currentPartners.push({ id: 'pt_' + Date.now(), name, url: downloadURL });
-        saveToStorage('partners', currentPartners); renderPartnersAdmin(); renderPartners();
-      }
-      document.getElementById('partnerForm').reset();
-      showToast('Logo partner diupload!', 'success');
-    } catch (error) { showToast('Gagal upload logo.', 'error'); }
-    submitBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-1.5"></i>Upload Logo';
-    submitBtn.disabled = false;
-  });
-
-  window.deletePartner = async function(id) {
-    if (!confirm('Hapus logo partner ini?')) return;
-    if (db && window._firebase) { const { doc, deleteDoc } = window._firebase; await deleteDoc(doc(db, 'partners', id)); }
-    else { currentPartners = currentPartners.filter(p => p.id !== id); saveToStorage('partners', currentPartners); renderPartnersAdmin(); renderPartners(); }
-    showToast('Logo dihapus', 'success');
-  };
-
-  // Hero Pic Form
-  document.getElementById('heroPicInput').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) { const reader = new FileReader(); reader.onload = function() { document.getElementById('heroPicPreview').src = reader.result; }; reader.readAsDataURL(file); }
-  });
-
-  document.getElementById('heroPicForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const fileInput = document.getElementById('heroPicInput');
-    if (!fileInput.files[0]) { showToast('Pilih gambar!', 'warning'); return; }
-    const file = fileInput.files[0];
-    const submitBtn = document.getElementById('heroPicSubmitBtn');
-    submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1.5"></i>Uploading...';
-    submitBtn.disabled = true;
-
-    try {
-      let downloadURL = '';
-      if (db && window._firebase) {
-        const { storage, ref, uploadBytes, getDownloadURL, doc, setDoc } = window._firebase;
-        const storageRef = ref(storage, `hero/${Date.now()}_${file.name}`);
-        const snapshot = await uploadBytes(storageRef, file);
-        downloadURL = await getDownloadURL(snapshot.ref);
-        await setDoc(doc(db, 'settings', 'heroPic'), { url: downloadURL });
-      } else {
-        downloadURL = await new Promise((resolve) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.readAsDataURL(file); });
-        currentHeroPic = downloadURL; saveToStorage('heroPic', currentHeroPic); renderHeroPic();
-      }
-      showToast('Foto profil diperbarui!', 'success');
-      fileInput.value = '';
-    } catch (error) { showToast('Gagal upload foto.', 'error'); }
-    submitBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-1.5"></i>Upload & Simpan Foto Profil';
-    submitBtn.disabled = false;
-  });
-
-  // Proof Form
-  document.getElementById('uploadProofForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const fileInput = document.getElementById('proofImageInput');
-    const locationInput = document.getElementById('proofLocationInput');
-    if (!fileInput.files[0]) { showToast('Pilih gambar!', 'warning'); return; }
-    const file = fileInput.files[0];
-    const location = locationInput.value.trim() || 'Lokasi';
-
-    try {
-      if (db && window._firebase) {
-        const { storage, ref, uploadBytes, getDownloadURL, collection, addDoc } = window._firebase;
-        const storageRef = ref(storage, `proofs/${Date.now()}_${file.name}`);
-        const snapshot = await uploadBytes(storageRef, file);
-        const downloadURL = await getDownloadURL(snapshot.ref);
-        await addDoc(collection(db, 'proofs'), { url: downloadURL, location, createdAt: new Date().toISOString() });
-      } else {
-        const reader = new FileReader();
-        reader.onload = function() {
-          const proofData = { id: 'proof_' + Date.now(), url: reader.result, location, createdAt: new Date().toISOString() };
-          currentProofs.unshift(proofData); saveToStorage('proofs', currentProofs); renderInstallations(); renderProofsAdmin();
-        };
-        reader.readAsDataURL(file);
-      }
-      document.getElementById('uploadProofForm').reset();
-      showToast('Foto diupload!', 'success');
-    } catch (error) { showToast('Gagal upload.', 'error'); }
-  });
-
-  window.deleteProof = async function(id) {
-    if (!confirm('Hapus foto ini?')) return;
-    if (db && window._firebase) { const { doc, deleteDoc } = window._firebase; await deleteDoc(doc(db, 'proofs', id)); }
-    else { currentProofs = currentProofs.filter(p => p.id !== id); saveToStorage('proofs', currentProofs); renderInstallations(); renderProofsAdmin(); }
-    showToast('Foto dihapus', 'success');
-  };
-
-  // Lead Functions
+      const { collection, onSnapshot, query, orderBy } = window._firebase;
+      const q = query(collection(db, 'leads'), orderBy('createdAt', 'desc'));
+      unsubscribeLeads = onSnapshot(q, (snap) => { currentLeads = []; snap.forEach(d => currentLeads.push({ id: d.id, ...d.data() })); renderLeadsTable(); updateStats(); });
+      document.getElementById('adminModeLabel').textContent = 'Firebase Connected';
+      document.getElementById('adminModeLabel').classList.add('text-green-400');
+    } else { currentLeads = loadFromStorage('leads', []); renderLeadsTable(); updateStats(); document.getElementById('adminModeLabel').textContent = 'Demo Mode (localStorage)'; }
+  }
+  
+  function renderLeadsTable() {
+    const tbody = document.getElementById('leadsTableBody'); const empty = document.getElementById('leadsEmpty');
+    const search = document.getElementById('searchLeads')?.value.toLowerCase() || '';
+    const filtered = currentLeads.filter(l => !search || l.name.toLowerCase().includes(search) || l.address.toLowerCase().includes(search) || l.phone.includes(search));
+    if (filtered.length === 0) { tbody.innerHTML = ''; empty.classList.remove('hidden'); return; }
+    empty.classList.add('hidden');
+    tbody.innerHTML = filtered.map(lead => {
+      const date = new Date(lead.createdAt);
+      const dateStr = date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+      const timeStr = date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+      const status = lead.status || 'new'; const statusLabels = { new: 'Baru', contacted: 'Dihubungi', closed: 'Closing' };
+      const providerColors = { 'IndiHome': 'text-red-400 bg-red-500/10', 'Biznet': 'text-orange-400 bg-orange-500/10', 'MyRepublic': 'text-rose-400 bg-rose-500/10' };
+      const cleanPhone = lead.phone.replace(/^0/, '62').replace(/[\s+-]/g, '');
+      return `<tr class="border-b border-white/5 hover:bg-white/[0.02] transition"><td class="px-3 py-3"><div class="font-bold text-white text-sm">${escapeHtml(lead.name)}</div><div class="text-[10px] text-gray-500">${timeStr}</div></td><td class="px-3 py-3"><a href="https://wa.me/${cleanPhone}" target="_blank" class="text-sm text-gray-300 hover:text-green-400 transition flex items-center gap-1"><i class="fa-brands fa-whatsapp text-green-400"></i>${escapeHtml(lead.phone)}</a></td><td class="px-3 py-3 text-xs text-gray-400 max-w-[200px]">${escapeHtml(lead.address)}</td><td class="px-3 py-3"><span class="inline-block px-2 py-1 rounded text-[10px] font-bold ${providerColors[lead.provider] || 'text-gray-400 bg-white/5'}">${escapeHtml(lead.provider)}</span></td><td class="px-3 py-3 text-xs text-gray-400">${dateStr}</td><td class="px-3 py-3"><span class="status-badge ${status} inline-block px-2 py-1 rounded text-[10px] font-bold">${statusLabels[status]}</span></td><td class="px-3 py-3"><div class="flex items-center justify-end gap-1.5"><a href="https://wa.me/${cleanPhone}?text=${encodeURIComponent(`Halo ${lead.name}, saya Rian dari tim Sales WiFi. Anda sudah mengisi form cek coverage untuk ${lead.provider} di alamat ${lead.address}. Saya akan bantu cek ketersediaan layanannya ya.`)}" target="_blank" class="px-2.5 py-1.5 rounded-lg bg-green-500/20 text-green-400 hover:bg-green-500/30 border border-green-500/30 transition text-[11px] font-semibold flex items-center gap-1"><i class="fa-brands fa-whatsapp"></i><span class="hidden lg:inline">Hubungi</span></a><button onclick="updateLeadStatus('${lead.id}', 'contacted')" class="px-2.5 py-1.5 rounded-lg bg-accent-yellow/20 text-accent-yellow hover:bg-accent-yellow/30 border border-accent-yellow/30 transition text-[11px] font-semibold"><i class="fa-solid fa-phone"></i></button><button onclick="updateLeadStatus('${lead.id}', 'closed')" class="px-2.5 py-1.5 rounded-lg bg-green-500/20 text-green-400 hover:bg-green-500/30 border border-green-500/30 transition text-[11px] font-semibold"><i class="fa-solid fa-check"></i></button><button onclick="deleteLead('${lead.id}')" class="px-2.5 py-1.5 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30 transition text-[11px] font-semibold"><i class="fa-solid fa-trash"></i></button></div></td></tr>`;
+    }).join('');
+  }
+  
   window.updateLeadStatus = async function(id, status) {
     if (db && window._firebase) { const { doc, updateDoc } = window._firebase; await updateDoc(doc(db, 'leads', id), { status }); }
     else { const leads = loadFromStorage('leads', []); const i = leads.findIndex(l => l.id === id); if (i !== -1) { leads[i].status = status; saveToStorage('leads', leads); currentLeads = leads; renderLeadsTable(); updateStats(); } }
-    showToast('Status diupdate', 'success');
+    showToast(`Status lead diupdate menjadi: ${status}`, 'success');
+  };
+  window.deleteLead = async function(id) {
+    if (!confirm('Yakin ingin menghapus lead ini?')) return;
+    if (db && window._firebase) { const { doc, deleteDoc } = window._firebase; await deleteDoc(doc(db, 'leads', id)); }
+    else { let leads = loadFromStorage('leads', []); leads = leads.filter(l => l.id !== id); saveToStorage('leads', leads); currentLeads = leads; renderLeadsTable(); updateStats(); }
+    showToast('Lead berhasil dihapus', 'success');
   };
   
-  // ============================================================
-  // INIT
-  // ============================================================
-  window.openAdminLogin = function() { document.getElementById('adminLoginModal').classList.remove('hidden-modal'); };
-  window.closeAdminLogin = function() { document.getElementById('adminLoginModal').classList.add('hidden-modal'); };
-  window.openAdminDashboard = function() { document.getElementById('adminDashboard').classList.remove('hidden-modal'); document.body.style.overflow = 'hidden'; };
-  window.closeAdminDashboard = function() { document.getElementById('adminDashboard').classList.add('hidden-modal'); document.body.style.overflow = ''; };
-  window.logoutAdmin = function() { sessionStorage.removeItem('rian_admin_session'); closeAdminDashboard(); };
+  function updateStats() {
+    const total = currentLeads.length; const today = new Date().toDateString();
+    const todayLeads = currentLeads.filter(l => new Date(l.createdAt).toDateString() === today).length;
+    const closed = currentLeads.filter(l => l.status === 'closed').length;
+    const conv = total > 0 ? Math.round((closed / total) * 100) : 0;
+    animateCounter('statTotalLeads', total); animateCounter('statTodayLeads', todayLeads); animateCounter('statClosedLeads', closed);
+    document.getElementById('statConversion').textContent = conv + '%';
+    const totalTrend = document.getElementById('statTotalLeadsTrend');
+    const closedTrend = document.getElementById('statClosedLeadsTrend');
+    if (total > 0) { totalTrend.textContent = 'AKTIF'; totalTrend.className = 'text-[10px] text-green-400 font-bold'; } else { totalTrend.textContent = 'MENUNGGU'; totalTrend.className = 'text-[10px] text-gray-500 font-bold'; }
+    if (closed > 0) { closedTrend.textContent = 'TERCAPAI'; closedTrend.className = 'text-[10px] text-green-400 font-bold'; } else { closedTrend.textContent = 'MENUNGGU'; closedTrend.className = 'text-[10px] text-gray-500 font-bold'; }
+  }
+  function animateCounter(id, target) { const el = document.getElementById(id); if (!el) return; const cur = parseInt(el.textContent) || 0; const stepV = (target - cur) / 20; let step = 0; const t = setInterval(() => { step++; el.textContent = Math.round(cur + stepV * step); if (step >= 20) { el.textContent = target; clearInterval(t); } }, 30); }
+  
+  window.openAdminLogin = function() { 
+    const sm = document.getElementById('successModal'); if(sm) sm.classList.add('hidden-modal'); // Tutup success modal jika kebuka
+    document.getElementById('adminLoginModal').classList.remove('hidden-modal'); 
+    setTimeout(() => document.getElementById('adminPassword').focus(), 100); 
+  };
+  window.closeAdminLogin = function() { 
+    document.getElementById('adminLoginModal').classList.add('hidden-modal'); 
+    document.getElementById('adminPassword').value = ''; 
+  };
+  window.togglePassword = function(inputId, btn) { const i = document.getElementById(inputId); const ic = btn.querySelector('i'); if (i.type === 'password') { i.type = 'text'; ic.classList.replace('fa-eye', 'fa-eye-slash'); } else { i.type = 'password'; ic.classList.replace('fa-eye-slash', 'fa-eye'); } };
+  
+  document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
+    e.preventDefault(); const pwd = document.getElementById('adminPassword').value;
+    if (pwd === ADMIN_PASSWORD) { sessionStorage.setItem('rian_admin_session', 'active'); closeAdminLogin(); openAdminDashboard(); showToast('Selamat datang, Admin!', 'success'); }
+    else { showToast('Password salah! Coba lagi.', 'error'); const i = document.getElementById('adminPassword'); i.value = ''; i.focus(); i.classList.add('border-red-500'); setTimeout(() => i.classList.remove('border-red-500'), 1500); }
+  });
+  
+  window.openAdminDashboard = function() { document.getElementById('adminDashboard').classList.remove('hidden-modal'); document.body.style.overflow = 'hidden'; loadLeads(); loadProofs(); renderPromoForm(); renderPackagesTable(); renderTestimonialsAdmin(); renderProofsAdmin(); renderPartnersAdmin(); renderHeroPicForm(); };
+  window.closeAdminDashboard = function() { 
+    document.getElementById('adminDashboard').classList.add('hidden-modal'); 
+    const sm = document.getElementById('successModal'); if(sm) sm.classList.add('hidden-modal'); // Pastikan success modal juga tertutup
+    document.body.style.overflow = ''; 
+    if (unsubscribeLeads) { try { unsubscribeLeads(); } catch(e){} unsubscribeLeads = null; } 
+    if (unsubscribeProofs) { try { unsubscribeProofs(); } catch(e){} unsubscribeProofs = null; } 
+  };
+  window.logoutAdmin = function() { sessionStorage.removeItem('rian_admin_session'); closeAdminDashboard(); showToast('Anda telah logout', 'info'); };
   window.switchDashboardTab = function(tab) {
     document.querySelectorAll('.dash-tab').forEach(b => { b.classList.remove('text-accent-orange', 'border-accent-orange'); b.classList.add('text-gray-400', 'border-transparent'); });
-    document.getElementById(`tabBtn-${tab}`).classList.add('text-accent-orange', 'border-accent-orange');
+    const btn = document.getElementById(`tabBtn-${tab}`); btn.classList.add('text-accent-orange', 'border-accent-orange'); btn.classList.remove('text-gray-400', 'border-transparent');
     document.querySelectorAll('.dash-content').forEach(c => c.classList.add('hidden'));
     document.getElementById(`dashTab-${tab}`).classList.remove('hidden');
   };
   
-  document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
+  function renderPromoForm() { document.getElementById('promoTextInput').value = currentPromo.text; document.getElementById('promoDescInput').value = currentPromo.desc; }
+  document.getElementById('promoForm').addEventListener('submit', (e) => { e.preventDefault(); currentPromo = { text: document.getElementById('promoTextInput').value, desc: document.getElementById('promoDescInput').value }; saveToStorage('promo', currentPromo); updatePromoBanner(); showToast('Banner promo berhasil disimpan!', 'success'); });
+  function updatePromoBanner() { document.getElementById('promoBannerText').textContent = currentPromo.text; }
+  
+  // Package Form Logic
+  document.getElementById('packageForm').addEventListener('submit', (e) => {
     e.preventDefault();
-    if (document.getElementById('adminPassword').value === ADMIN_PASSWORD) {
-      sessionStorage.setItem('rian_admin_session', 'active');
-      closeAdminLogin(); openAdminDashboard(); showToast('Selamat datang!', 'success');
-    } else { showToast('Password salah!', 'error'); }
+    const id = document.getElementById('packageId').value;
+    const pkgData = { category: document.getElementById('packageCategory').value, name: document.getElementById('packageName').value.trim(), speed: parseInt(document.getElementById('packageSpeed').value) || 0, originalPrice: parseInt(document.getElementById('packageOriginalPrice').value) || 0, promoPrice: parseInt(document.getElementById('packagePromoPrice').value) || 0, badge: document.getElementById('packageBadge').value.trim(), features: document.getElementById('packageFeatures').value.trim() };
+    if (!pkgData.name || !pkgData.speed || !pkgData.promoPrice) { showToast('Mohon lengkapi Nama, Kecepatan, dan Harga Promo!', 'error'); return; }
+    if (id) {
+      const idx = currentPackages.findIndex(p => p.id === id);
+      if (idx !== -1) currentPackages[idx] = { ...currentPackages[idx], ...pkgData };
+      showToast('Paket berhasil diperbarui!', 'success');
+    } else {
+      const maxOrder = Math.max(-1, ...currentPackages.filter(p => p.category === pkgData.category).map(p => p.order || 0));
+      pkgData.id = 'pkg_' + Date.now();
+      pkgData.order = maxOrder + 1;
+      currentPackages.push(pkgData);
+      showToast('Paket baru berhasil ditambahkan!', 'success');
+    }
+    saveToStorage('packages', currentPackages); renderPackagesTable(); renderPackages(); resetPackageForm();
   });
 
+  window.movePackage = function(id, direction) {
+    const pkgToMove = currentPackages.find(p => p.id === id);
+    if (!pkgToMove) return;
+
+    const categoryPackages = currentPackages
+      .filter(p => p.category === pkgToMove.category)
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    const currentIndex = categoryPackages.findIndex(p => p.id === id);
+    const targetIndex = currentIndex + direction;
+
+    if (targetIndex < 0 || targetIndex >= categoryPackages.length) {
+      showToast('Paket sudah berada di urutan paling atas/bawah', 'warning');
+      return;
+    }
+
+    const targetPkg = categoryPackages[targetIndex];
+
+    const tempOrder = pkgToMove.order || 0;
+    pkgToMove.order = targetPkg.order || 0;
+    targetPkg.order = tempOrder;
+
+    saveToStorage('packages', currentPackages);
+    renderPackagesTable();
+    renderPackages();
+    showToast('Urutan paket berhasil diubah!', 'success');
+  };
+  
+  window.editPackage = function(id) {
+    const pkg = currentPackages.find(p => p.id === id); if (!pkg) return;
+    document.getElementById('packageId').value = pkg.id; document.getElementById('packageCategory').value = pkg.category; document.getElementById('packageName').value = pkg.name; document.getElementById('packageSpeed').value = pkg.speed; document.getElementById('packageOriginalPrice').value = pkg.originalPrice; document.getElementById('packagePromoPrice').value = pkg.promoPrice; document.getElementById('packageBadge').value = pkg.badge || ''; document.getElementById('packageFeatures').value = pkg.features;
+    document.getElementById('packageSubmitBtn').innerHTML = '<i class="fa-solid fa-floppy-disk mr-1.5"></i>Update Paket';
+    document.getElementById('packageCancelBtn').classList.remove('hidden');
+    document.getElementById('dashTab-promo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  window.deletePackage = function(id) {
+    if (!confirm('Yakin ingin menghapus paket ini?')) return;
+    currentPackages = currentPackages.filter(p => p.id !== id); saveToStorage('packages', currentPackages); renderPackagesTable(); renderPackages(); showToast('Paket berhasil dihapus', 'success');
+    if (document.getElementById('packageId').value === id) resetPackageForm();
+  };
+  window.resetPackageForm = function() {
+    document.getElementById('packageForm').reset(); document.getElementById('packageId').value = ''; document.getElementById('packageSubmitBtn').innerHTML = '<i class="fa-solid fa-plus mr-1.5"></i>Tambah Paket'; document.getElementById('packageCancelBtn').classList.add('hidden');
+  };
+
+  // Testimonial Form Logic
+  document.getElementById('testimonialForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const id = document.getElementById('testimonialId').value;
+    const tData = { name: document.getElementById('testimonialName').value.trim(), location: document.getElementById('testimonialLocation').value.trim(), rating: parseInt(document.getElementById('testimonialRating').value) || 5, text: document.getElementById('testimonialText').value.trim(), photo: document.getElementById('testimonialPhoto').value.trim() };
+    if (!tData.name || !tData.text) { showToast('Mohon lengkapi Nama dan Isi Testimoni!', 'error'); return; }
+    if (id) { const idx = currentTestimonials.findIndex(t => t.id === id); if (idx !== -1) currentTestimonials[idx] = { ...currentTestimonials[idx], ...tData }; showToast('Testimoni berhasil diperbarui!', 'success'); } 
+    else { tData.id = 'tst_' + Date.now(); currentTestimonials.push(tData); showToast('Testimoni baru berhasil ditambahkan!', 'success'); }
+    saveToStorage('testimonials', currentTestimonials); renderTestimonialsAdmin(); renderTestimonials(); resetTestimonialForm();
+  });
+  window.editTestimonial = function(id) {
+    const t = currentTestimonials.find(t => t.id === id); if (!t) return;
+    document.getElementById('testimonialId').value = t.id; document.getElementById('testimonialName').value = t.name; document.getElementById('testimonialLocation').value = t.location; document.getElementById('testimonialRating').value = t.rating; document.getElementById('testimonialText').value = t.text; document.getElementById('testimonialPhoto').value = t.photo;
+    document.getElementById('testimonialSubmitBtn').innerHTML = '<i class="fa-solid fa-floppy-disk mr-1.5"></i>Update Testimoni';
+    document.getElementById('testimonialCancelBtn').classList.remove('hidden');
+  };
+  window.deleteTestimonial = function(id) {
+    if (!confirm('Yakin ingin menghapus testimoni ini?')) return;
+    currentTestimonials = currentTestimonials.filter(t => t.id !== id); saveToStorage('testimonials', currentTestimonials); renderTestimonialsAdmin(); renderTestimonials(); showToast('Testimoni berhasil dihapus', 'success');
+    if (document.getElementById('testimonialId').value === id) resetTestimonialForm();
+  };
+  window.resetTestimonialForm = function() {
+    document.getElementById('testimonialForm').reset(); document.getElementById('testimonialId').value = ''; document.getElementById('testimonialSubmitBtn').innerHTML = '<i class="fa-solid fa-plus mr-1.5"></i>Tambah Testimoni'; document.getElementById('testimonialCancelBtn').classList.add('hidden');
+  };
+
+  // ============================================================
+  // HERO PROFILE PIC UPLOAD LOGIC
+  // ============================================================
+  function renderHeroPicForm() {
+    document.getElementById('heroPicPreview').src = currentHeroPic;
+  }
+  
+  document.getElementById('heroPicInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        document.getElementById('heroPicPreview').src = reader.result;
+      }
+      reader.readAsDataURL(file);
+    }
+  });
+  
+  document.getElementById('heroPicForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fileInput = document.getElementById('heroPicInput');
+    if (!fileInput.files[0]) {
+      showToast('Pilih gambar terlebih dahulu!', 'warning');
+      return;
+    }
+    
+    const file = fileInput.files[0];
+    const submitBtn = document.getElementById('heroPicSubmitBtn');
+    const originalBtnHtml = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1.5"></i>Uploading...';
+    submitBtn.disabled = true;
+
+    try {
+      let downloadURL = '';
+      if (db && window._firebase) {
+        const { storage, ref, uploadBytes, getDownloadURL } = window._firebase;
+        const storageRef = ref(storage, `hero/${Date.now()}_${file.name}`);
+        const snapshot = await uploadBytes(storageRef, file);
+        downloadURL = await getDownloadURL(snapshot.ref);
+      } else {
+        // Demo Mode: Convert to Base64
+        downloadURL = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(file);
+        });
+      }
+      
+      currentHeroPic = downloadURL;
+      saveToStorage('heroPic', currentHeroPic);
+      renderHeroPic();
+      showToast('Foto profil berhasil diupload & diperbarui!', 'success');
+      fileInput.value = '';
+    } catch (error) {
+      console.error('Error uploading hero pic:', error);
+      showToast('Gagal upload foto profil.', 'error');
+    } finally {
+      submitBtn.innerHTML = originalBtnHtml;
+      submitBtn.disabled = false;
+    }
+  });
+
+  // ============================================================
+  // PARTNER LOGO UPLOAD LOGIC
+  // ============================================================
+  document.getElementById('partnerForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('partnerName').value.trim();
+    const fileInput = document.getElementById('partnerLogoInput');
+    
+    if (!name || !fileInput.files[0]) {
+      showToast('Nama dan file logo wajib diisi!', 'error');
+      return;
+    }
+    
+    const file = fileInput.files[0];
+    const submitBtn = document.getElementById('partnerSubmitBtn');
+    const originalBtnHtml = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1.5"></i>Uploading...';
+    submitBtn.disabled = true;
+
+    try {
+      let downloadURL = '';
+      if (db && window._firebase) {
+        const { storage, ref, uploadBytes, getDownloadURL } = window._firebase;
+        const storageRef = ref(storage, `partners/${Date.now()}_${file.name}`);
+        const snapshot = await uploadBytes(storageRef, file);
+        downloadURL = await getDownloadURL(snapshot.ref);
+      } else {
+        // Demo Mode: Convert to Base64
+        downloadURL = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(file);
+        });
+      }
+      
+      currentPartners.push({ id: 'pt_' + Date.now(), name, url: downloadURL });
+      saveToStorage('partners', currentPartners);
+      renderPartnersAdmin();
+      renderPartners();
+      showToast('Logo partner berhasil diupload!', 'success');
+      document.getElementById('partnerForm').reset();
+    } catch (error) {
+      console.error('Error uploading partner logo:', error);
+      showToast('Gagal upload logo partner.', 'error');
+    } finally {
+      submitBtn.innerHTML = originalBtnHtml;
+      submitBtn.disabled = false;
+    }
+  });
+  
+  window.deletePartner = function(id) {
+    if (!confirm('Hapus logo partner ini?')) return;
+    currentPartners = currentPartners.filter(p => p.id !== id);
+    saveToStorage('partners', currentPartners);
+    renderPartnersAdmin();
+    renderPartners();
+    showToast('Logo partner dihapus', 'success');
+  };
+
+  window.exportLeads = function() {
+    if (currentLeads.length === 0) { showToast('Tidak ada data untuk diexport', 'warning'); return; }
+    const headers = ['Nama', 'No WA', 'Alamat', 'Provider', 'Tanggal', 'Status'];
+    const rows = currentLeads.map(l => [l.name, l.phone, l.address, l.provider, new Date(l.createdAt).toLocaleString('id-ID'), l.status || 'new']);
+    let csv = headers.join(',') + '\n';
+    rows.forEach(r => { csv += r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',') + '\n'; });
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = `leads_${new Date().toISOString().slice(0,10)}.csv`; link.click(); URL.revokeObjectURL(url);
+    showToast('Data leads berhasil diexport!', 'success');
+  };
+  
+  window.closeSuccessModal = function() { document.getElementById('successModal').classList.add('hidden-modal'); };
+  window.toggleMobileMenu = function() { document.getElementById('mobileMenu').classList.toggle('hidden-menu'); };
+  
+  const revealObserver = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } }); }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  
+  const counterObserver = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { const el = e.target; const target = parseFloat(el.dataset.counter); const decimal = parseInt(el.dataset.decimal) || 0; let step = 0; const stepV = target / 30; const t = setInterval(() => { step++; const v = stepV * step; el.textContent = decimal > 0 ? v.toFixed(decimal) : Math.round(v); if (step >= 30) { el.textContent = decimal > 0 ? target.toFixed(decimal) : target; clearInterval(t); } }, 50); counterObserver.unobserve(el); } }); }, { threshold: 0.5 });
+  document.querySelectorAll('[data-counter]').forEach(el => counterObserver.observe(el));
+  
+  document.getElementById('searchLeads').addEventListener('input', renderLeadsTable);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeAdminLogin(); closeSuccessModal(); } });
+
+  // ============================================================
+  // FIREBASE STORAGE INTEGRATION (Upload Bukti Pemasangan)
+  // ============================================================
+  function loadProofs() {
+    if (db && window._firebase) {
+      const { collection, onSnapshot, query, orderBy } = window._firebase;
+      const q = query(collection(db, 'proofs'), orderBy('createdAt', 'desc'));
+      unsubscribeProofs = onSnapshot(q, (snap) => {
+        currentProofs = [];
+        snap.forEach(d => currentProofs.push({ id: d.id, ...d.data() }));
+        renderInstallations();
+        renderProofsAdmin();
+      });
+    } else {
+      currentProofs = loadFromStorage('proofs', DEFAULT_PROOFS);
+      renderInstallations();
+      renderProofsAdmin();
+    }
+  }
+
+  document.getElementById('uploadProofForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fileInput = document.getElementById('proofImageInput');
+    const locationInput = document.getElementById('proofLocationInput');
+    
+    if (!fileInput.files[0]) { showToast('Pilih gambar terlebih dahulu!', 'warning'); return; }
+    
+    const file = fileInput.files[0];
+    const location = locationInput.value.trim() || 'Lokasi';
+    
+    if (!db || !window._firebase) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        const proofData = { id: 'proof_' + Date.now(), url: reader.result, location: location, createdAt: new Date().toISOString() };
+        currentProofs.unshift(proofData);
+        saveToStorage('proofs', currentProofs);
+        renderInstallations();
+        renderProofsAdmin();
+        showToast('Foto berhasil ditambahkan (Demo Mode)', 'success');
+        document.getElementById('uploadProofForm').reset();
+      }
+      reader.readAsDataURL(file);
+      return;
+    }
+
+    const { storage, ref, uploadBytes, getDownloadURL, collection, addDoc } = window._firebase;
+    showToast('Mengupload gambar ke Firebase Storage...', 'info');
+    
+    try {
+      const storageRef = ref(storage, `proofs/${Date.now()}_${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      const proofData = { url: downloadURL, location: location, createdAt: new Date().toISOString() };
+      await addDoc(collection(db, 'proofs'), proofData);
+      showToast('Foto berhasil diupload & ditampilkan di web!', 'success');
+      document.getElementById('uploadProofForm').reset();
+    } catch (error) {
+      console.error('Error upload to Firebase Storage:', error);
+      showToast('Gagal upload gambar. Pastikan Firebase Storage sudah diaktifkan.', 'error');
+    }
+  });
+
+  window.deleteProof = async function(id) {
+    if (!confirm('Hapus foto ini dari web?')) return;
+    const proof = currentProofs.find(p => p.id === id);
+    if (db && window._firebase && proof) {
+      const { doc, deleteDoc, storage, ref, deleteObject } = window._firebase;
+      try {
+        const fileRef = ref(storage, proof.url); 
+        await deleteObject(fileRef).catch(e => console.log("File storage tidak bisa dihapus langsung via URL, lanjut hapus doc."));
+        await deleteDoc(doc(db, 'proofs', id));
+      } catch (error) {
+        console.error('Error delete proof:', error);
+        showToast('Gagal menghapus foto.', 'error');
+      }
+    } else {
+      currentProofs = currentProofs.filter(p => p.id !== id);
+      saveToStorage('proofs', currentProofs);
+      renderInstallations();
+      renderProofsAdmin();
+    }
+    showToast('Foto berhasil dihapus', 'success');
+  };
+  
   function init() {
     const canvas = document.getElementById('networkCanvas'); if (canvas) new NetworkBackground(canvas);
-    loadAllData();
+    renderPackages(); renderTestimonials(); updatePromoBanner(); renderPartners(); renderHeroPic(); loadProofs();
     if (sessionStorage.getItem('rian_admin_session') === 'active') openAdminDashboard();
+    console.log('%c🚀 Rian WiFi Specialist Website Loaded', 'color: #FF6B35; font-weight: bold; font-size: 14px;');
   }
   
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 </script>
+
 </body>
 </html>
